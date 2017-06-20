@@ -15,7 +15,9 @@ public class Mesh
 	public ObjQuad[] quads;					// quads (4 vertex indices)
 	int vertexBufferId;						// vertex buffer
 	int triangleBufferId;					// triangle buffer
-	int quadBufferId;						// quad buffer
+	int quadBufferId;                       // quad buffer
+    public Mesh Parent;                     // parent mesh
+    public Matrix4 modelMatrix;             // model matrix
 
 	// constructor
 	public Mesh( string fileName )
