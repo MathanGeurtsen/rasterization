@@ -21,6 +21,7 @@ class Game
 	Shader postproc;						// shader to use for post processing
 	Texture wood;							// texture to use for rendering
     Texture iron;                           // texture to use for rendering
+    Texture marble;
     RenderTarget target;					// intermediate render target
 	ScreenQuad quad;						// screen filling quad for post processing
 	bool useRenderTarget = true;
@@ -29,7 +30,7 @@ class Game
 	public void Init()
 	{
 		// load object (in this case a tank
-		mesh = new Mesh( "../../assets/teapot.obj" );
+		mesh = new Mesh("../../assets/teapot.obj");
 		floor = new Mesh( "../../assets/floor.obj" );
 		// initialize stopwatch
 		timer = new Stopwatch();
@@ -41,8 +42,9 @@ class Game
 		// load a texture
 		wood = new Texture( "../../assets/wood.jpg" );
         iron = new Texture("../../assets/iron.jpg");
-		// create the render target
-		target = new RenderTarget( screen.width, screen.height );
+            marble = new Texture("../../assets/marble.jpg");
+            // create the render target
+            target = new RenderTarget( screen.width, screen.height );
 		quad = new ScreenQuad();
         // set shader values
         Vector3 lightPos = new Vector3(1, 1, 1);
@@ -67,7 +69,7 @@ class Game
 	
 		// prepare matrix for vertex shader
 		Matrix4 transform = Matrix4.CreateFromAxisAngle( new Vector3( 0, 1, 0 ), a );
-		transform *= Matrix4.CreateTranslation( 0, -4, -15 );
+		transform *= Matrix4.CreateTranslation( 0, -4, -15);
 		transform *= Matrix4.CreatePerspectiveFieldOfView( 1.2f, 1.3f, .1f, 1000 );
 
 		// update rotation
@@ -80,7 +82,7 @@ class Game
 			target.Bind();
 
 			// render scene to render target
-			mesh.Render( shader, transform, iron);
+			mesh.Render( shader, transform, marble);
 			floor.Render( shader, transform, wood );
 
 			// render quad
@@ -90,7 +92,7 @@ class Game
 		else
 		{
 			// render scene directly to the screen
-			mesh.Render( shader, transform, iron );
+			mesh.Render( shader, transform, marble );
 			floor.Render( shader, transform, wood );
 		}
 	}
