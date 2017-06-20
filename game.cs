@@ -19,14 +19,15 @@ class Game
 	Shader shader;							// shader to use for rendering
 	Shader postproc;						// shader to use for post processing
 	Texture wood;							// texture to use for rendering
-	RenderTarget target;					// intermediate render target
+    Texture iron;                           // texture to use for rendering
+    RenderTarget target;					// intermediate render target
 	ScreenQuad quad;						// screen filling quad for post processing
 	bool useRenderTarget = true;
 
 	// initialize
 	public void Init()
 	{
-		// load teapot
+		// load object (in this case a tank
 		mesh = new Mesh( "../../assets/teapot.obj" );
 		floor = new Mesh( "../../assets/floor.obj" );
 		// initialize stopwatch
@@ -38,6 +39,7 @@ class Game
 		postproc = new Shader( "../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl" );
 		// load a texture
 		wood = new Texture( "../../assets/wood.jpg" );
+        iron = new Texture("../../assets/iron.jpg");
 		// create the render target
 		target = new RenderTarget( screen.width, screen.height );
 		quad = new ScreenQuad();
@@ -73,7 +75,7 @@ class Game
 			target.Bind();
 
 			// render scene to render target
-			mesh.Render( shader, transform, wood );
+			mesh.Render( shader, transform, iron);
 			floor.Render( shader, transform, wood );
 
 			// render quad
@@ -83,7 +85,7 @@ class Game
 		else
 		{
 			// render scene directly to the screen
-			mesh.Render( shader, transform, wood );
+			mesh.Render( shader, transform, iron );
 			floor.Render( shader, transform, wood );
 		}
 	}
