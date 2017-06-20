@@ -12,26 +12,39 @@ namespace Template_P3 {
     {
 	    // member variables
 	    public Surface screen;					// background surface for printing etc.
-	    Mesh mesh, floor;						// a mesh to draw using OpenGL
+	    Mesh teapot, car, floor;						// a mesh to draw using OpenGL
 	    const float PI = 3.1415926535f;			// PI
-	    float a = 0;							// teapot rotation angle
 	    Stopwatch timer;						// timer for measuring frame duration
 	    Shader shader;							// shader to use for rendering
 	    Shader postproc;						// shader to use for post processing
-	    Texture wood;							// texture to use for rendering
+	    Texture wood,marble,iron;							// texture to use for rendering
 	    RenderTarget target;					// intermediate render target
 	    ScreenQuad quad;						// screen filling quad for post processing
 	    bool useRenderTarget = true;
         SceneGraph scenegraph;
+        float speed = 1f;
 
         // initialize
         public void Init()
 	    {
 		    // load teapot
-		    mesh = new Mesh( "../../assets/teapot.obj" );
-		    floor = new Mesh( "../../assets/floor.obj" );
-            mesh.Parent = floor;
+		    teapot = new Mesh( "../../assets/teapot.obj" );
+            car = new Mesh("../../assets/car.obj");
+            floor = new Mesh( "../../assets/floor.obj" );
+
+            // load a texture
+            wood = new Texture("../../assets/wood.jpg");
+            marble = new Texture("../../assets/marble.jpg");
+            iron = new Texture("../../assets/iron.jpg");
+
+            // load textures to meshes
+            teapot.usedTexture = marble;
+            car.usedTexture = iron;
+            floor.usedTexture = wood;
+
+            teapot.Parent = floor;
             floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
+            car.modelMatrix = Matrix4.CreateTranslation(0, 0, -200);
             // initialize stopwatch
             timer = new Stopwatch();
 		    timer.Reset();
@@ -39,15 +52,14 @@ namespace Template_P3 {
 		    // create shaders
 		    shader = new Shader( "../../shaders/vs.glsl", "../../shaders/fs.glsl" );
 		    postproc = new Shader( "../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl" );
-		    // load a texture
-		    wood = new Texture( "../../assets/wood.jpg" );
-		    // create the render target
-		    target = new RenderTarget( screen.width, screen.height );
+            // create the render target
+            target = new RenderTarget( screen.width, screen.height );
 		    quad = new ScreenQuad();
             // create scene graph
             scenegraph = new SceneGraph();
             scenegraph.meshTree.Add(floor);
-            scenegraph.meshTree.Add(mesh);
+            scenegraph.meshTree.Add(teapot);
+            scenegraph.meshTree.Add(car);
             scenegraph.Render();
    	    }
 
@@ -55,7 +67,7 @@ namespace Template_P3 {
 	    public void Tick()
 	    {
 		    screen.Clear( 0 );
-		    screen.Print( "hello world", 2, 2, 0xffff00 );
+		    screen.Print( speed.ToString(), 2, 2, 0xffff00 );
             control();
 	    }
 
@@ -64,17 +76,17 @@ namespace Template_P3 {
             var keystate = OpenTK.Input.Keyboard.GetState();
 
             if (keystate[OpenTK.Input.Key.W])
-                scenegraph.move(new Vector3(0, 0, 0.5f));
+                scenegraph.move(new Vector3(0, 0, 0.5f) * speed);
             if (keystate[OpenTK.Input.Key.A])
-                scenegraph.move(new Vector3(0.5f, 0, 0));
+                scenegraph.move(new Vector3(0.5f, 0, 0) * speed);
             if (keystate[OpenTK.Input.Key.S])
-                scenegraph.move(new Vector3(0, 0, -0.5f));
+                scenegraph.move(new Vector3(0, 0, -0.5f) * speed);
             if (keystate[OpenTK.Input.Key.D])
-                scenegraph.move(new Vector3(-0.5f, 0, 0));
+                scenegraph.move(new Vector3(-0.5f, 0, 0) * speed);
             if (keystate[OpenTK.Input.Key.Q])
-                scenegraph.move(new Vector3(0, -0.5f, 0));
+                scenegraph.move(new Vector3(0, -0.5f, 0) * speed);
             if (keystate[OpenTK.Input.Key.E])
-                scenegraph.move(new Vector3(0, 0.5f, 0));
+                scenegraph.move(new Vector3(0, 0.5f, 0) * speed);
 
             if (keystate[OpenTK.Input.Key.Up])
                 scenegraph.rotate(new Vector3(1, 0, 0));
@@ -84,6 +96,14 @@ namespace Template_P3 {
                 scenegraph.rotate(new Vector3(0, -1, 0));
             if (keystate[OpenTK.Input.Key.Right])
                 scenegraph.rotate(new Vector3(0, 1, 0));
+
+            if (keystate[OpenTK.Input.Key.KeypadAdd] || keystate[OpenTK.Input.Key.Plus])
+                speed += 0.1f;
+            if (keystate[OpenTK.Input.Key.KeypadMinus] || keystate[OpenTK.Input.Key.Minus])
+                speed -= 0.1f;
+
+            if (speed < 0)
+                speed = 0;
         }
 
 	    // tick for OpenGL rendering code
@@ -98,9 +118,6 @@ namespace Template_P3 {
             scenegraph.transform();
 
 		    // update rotation
-		    //a += 0.001f * frameDuration; 
-		    if (a > 2 * PI) 
-            a -= 2 * PI;
 
 		    if (useRenderTarget)
 		    {
@@ -109,7 +126,7 @@ namespace Template_P3 {
 
                 // render scene to render target
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
-                    scenegraph.meshTree[i].Render(shader, scenegraph.meshTree[i].transform, wood);
+                    scenegraph.meshTree[i].Render(shader, scenegraph.meshTree[i].transform, scenegraph.meshTree[i].usedTexture);
 
 			    // render quad
 			    target.Unbind();
@@ -119,7 +136,7 @@ namespace Template_P3 {
 		    {
                 // render scene directly to the screen
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
-                    scenegraph.meshTree[i].Render(shader, scenegraph.meshTree[i].transform, wood);
+                    scenegraph.meshTree[i].Render(shader, scenegraph.meshTree[i].transform, scenegraph.meshTree[i].usedTexture);
             }
 	    }
     }

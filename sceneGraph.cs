@@ -48,10 +48,6 @@ namespace Template_P3
                 Vector3 tempVector = new Vector3(meshTree[i].viewMatrix.Column3.W, meshTree[i].viewMatrix.Column3.X, meshTree[i].viewMatrix.Column3.Y);
                 meshTree[i].viewMatrix *= Matrix4.Translation(-tempVector);
                 meshTree[i].viewMatrix *= Matrix4.Rotate(rotation, PI / 180);
-                Quaternion tempQuat = new Quaternion();
-                tempQuat.W = 0.9f;
-                tempQuat.Xyz = rotation;
-                Vector3.Transform(tempVector, tempQuat);
                 meshTree[i].viewMatrix *= Matrix4.Translation(tempVector);
             }
         }
