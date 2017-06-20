@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-
+using System.IO;
 // minimal OpenTK rendering framework for UU/INFOGR
 // Jacco Bikker, 2016
 
@@ -10,41 +10,27 @@ namespace Template_P3 {
 
     class Game
     {
-	    // member variables
-	    public Surface screen;					// background surface for printing etc.
-	    Mesh teapot, car, floor;						// a mesh to draw using OpenGL
-	    const float PI = 3.1415926535f;			// PI
-	    Stopwatch timer;						// timer for measuring frame duration
-	    Shader shader;							// shader to use for rendering
-	    Shader postproc;						// shader to use for post processing
-	    Texture wood,marble,iron;							// texture to use for rendering
-	    RenderTarget target;					// intermediate render target
-	    ScreenQuad quad;						// screen filling quad for post processing
-	    bool useRenderTarget = true;
+        // member variables
+        public Surface screen;                  // background surface for printing etc.
+        const float PI = 3.1415926535f;         // PI
+        Stopwatch timer;                        // timer for measuring frame duration
+        Shader shader;                          // shader to use for rendering
+        Shader postproc;                        // shader to use for post processing
+        Texture wood, marble, iron;             // texture to use for rendering
+        RenderTarget target;                    // intermediate render target
+        ScreenQuad quad;                        // screen filling quad for post processing
+        bool useRenderTarget = true;
         SceneGraph scenegraph;
         float speed = 1f;
 
         // initialize
         public void Init()
-	    {
-		    // load teapot
-		    teapot = new Mesh( "../../assets/teapot.obj" );
-            car = new Mesh("../../assets/car.obj");
-            floor = new Mesh( "../../assets/floor.obj" );
-
-            // load a texture
+        {
+            // load textures
             wood = new Texture("../../assets/wood.jpg");
             marble = new Texture("../../assets/marble.jpg");
             iron = new Texture("../../assets/iron.jpg");
 
-            // load textures to meshes
-            teapot.usedTexture = marble;
-            car.usedTexture = iron;
-            floor.usedTexture = wood;
-
-            teapot.Parent = floor;
-            floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
-            car.modelMatrix = Matrix4.CreateTranslation(0, 0, -200);
             // initialize stopwatch
             timer = new Stopwatch();
 		    timer.Reset();
@@ -57,11 +43,15 @@ namespace Template_P3 {
 		    quad = new ScreenQuad();
             // create scene graph
             scenegraph = new SceneGraph();
-            scenegraph.meshTree.Add(floor);
-            scenegraph.meshTree.Add(teapot);
-            scenegraph.meshTree.Add(car);
+
+            // adding meshes
+            addmesh("../../assets/floor.obj", wood, Matrix4.CreateTranslation(0, -4, -15));
+            addmesh("../../assets/car.obj", iron, Matrix4.CreateTranslation(0, 0, -200));
+            // teapot init with method
+            addmesh("../../assets/teapot.obj", marble, scenegraph.meshTree[0]);
+
             scenegraph.Render();
-   	    }
+        }
 
 	    // tick for background surface
 	    public void Tick()
@@ -137,9 +127,49 @@ namespace Template_P3 {
                 // render scene directly to the screen
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
                     scenegraph.meshTree[i].Render(shader, scenegraph.meshTree[i].transform, scenegraph.meshTree[i].usedTexture);
+            }// else
+	    }// RenderGL
+
+        public void addmesh(string objectFile, Texture texture)
+        {
+            Mesh mesh;
+            if (File.Exists(objectFile) && texture != null)
+            {
+                mesh = new Mesh(objectFile);
+                mesh.usedTexture = texture;
+                scenegraph.meshTree.Add(mesh);
             }
-	    }
-    }
+        }
+        public void addmesh(string objectFile, Texture texture, Mesh parentmesh)
+        {
+            Mesh mesh;
+            if (File.Exists(objectFile) && texture != null && parentmesh != null)
+            {
+                mesh = new Mesh(objectFile);
+                mesh.usedTexture = texture;
+                mesh.Parent = parentmesh;
+                
+                scenegraph.meshTree.Add(mesh);
+                
+            }
+        }
+
+        public void addmesh(string objectFile, Texture texture, Matrix4 modelMatrix)
+        {
+            Mesh mesh;
+            if (File.Exists(objectFile) && texture != null)
+            {
+                mesh = new Mesh(objectFile);
+                mesh.usedTexture = texture;
+                mesh.modelMatrix = modelMatrix;
+                scenegraph.meshTree.Add(mesh);
+
+            }
+        }
+
+
+
+    }// Game
 
 
 } // namespace Template_P3

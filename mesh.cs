@@ -20,7 +20,7 @@ namespace Template_P3 {
         public Matrix4 modelMatrix;             // model matrix
         public Matrix4 viewMatrix;              // view matrix
         public Matrix4 transform;               // tranform for obj
-        internal Texture usedTexture;
+        internal Texture usedTexture;           // texture
 
         // constructor
         public Mesh( string fileName )
