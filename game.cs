@@ -10,6 +10,7 @@ namespace Template_P3 {
 
 class Game
 {
+        
 	// member variables
 	public Surface screen;					// background surface for printing etc.
 	Mesh mesh, floor;						// a mesh to draw using OpenGL
@@ -43,7 +44,11 @@ class Game
 		// create the render target
 		target = new RenderTarget( screen.width, screen.height );
 		quad = new ScreenQuad();
-   	}
+        // set shader values
+        Vector3 lightPos = new Vector3(1, 1, 1);
+
+
+        }
 
 	// tick for background surface
 	public void Tick()
