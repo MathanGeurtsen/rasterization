@@ -20,9 +20,10 @@ namespace Template_P3 {
         public Matrix4 modelMatrix;             // model matrix
         public Matrix4 viewMatrix;              // view matrix
         public Matrix4 transform;               // tranform for obj
+        internal Texture usedTexture;
 
-	    // constructor
-	    public Mesh( string fileName )
+        // constructor
+        public Mesh( string fileName )
 	    {
 		    MeshLoader loader = new MeshLoader();
 		    loader.Load( this, fileName );
