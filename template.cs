@@ -19,9 +19,9 @@ public class OpenTKApp : GameWindow
 		GL.Enable( EnableCap.Texture2D );
 		GL.Disable( EnableCap.DepthTest );
 		GL.Hint( HintTarget.PerspectiveCorrectionHint, HintMode.Nicest );
-		ClientSize = new Size( 1280, 400 );
+		ClientSize = new Size( 640, 400 );
 		game = new Game();
-		game.screen = new Surface( Width*2, Height );
+		game.screen = new Surface( Width, Height );
 		Sprite.target = game.screen;
 		screenID = game.screen.GenTexture();
 		game.Init();

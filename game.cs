@@ -27,7 +27,8 @@ namespace Template_P3 {
         // initialize
         public void Init()
 	    {
-		    wood = new Texture( "../../assets/wood.jpg" );            
+            // load textures
+            initTextures();
             // load meshes
             initMeshes();
             // initialize stopwatch
@@ -40,7 +41,7 @@ namespace Template_P3 {
 		    // load a texture
 
 		    // create the render target
-		    target = new RenderTarget( screen.width, screen.height );
+		    target = new RenderTarget( screen.width, screen.height);
 		    quad = new ScreenQuad();
             // create scene graph
             scenegraph = new SceneGraph();
@@ -48,6 +49,11 @@ namespace Template_P3 {
             scenegraph.meshTree.Add(mesh);
             scenegraph.Render();
    	    }
+
+        public void initTextures()
+        {
+            wood = new Texture("../../assets/wood.jpg");
+        }
 
         public void initMeshes()
         {
