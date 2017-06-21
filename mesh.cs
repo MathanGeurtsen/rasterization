@@ -19,6 +19,8 @@ namespace Template_P3 {
         public Mesh Parent;                     // parent mesh
         public Matrix4 modelMatrix;             // model matrix
         public Matrix4 transform;               // tranform for obj
+        public Texture texture;                 // texture for obj
+
 
 	    // constructor
 	    public Mesh( string fileName )
@@ -50,7 +52,7 @@ namespace Template_P3 {
 	    }
 
 	    // render the mesh using the supplied shader and matrix
-	    public void Render( Shader shader, Matrix4 transform, Texture texture )
+	    public void Render( Shader shader )
 	    {
 		    // on first run, prepare buffers
 		    Prepare( shader );

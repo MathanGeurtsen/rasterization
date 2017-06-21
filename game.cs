@@ -27,6 +27,7 @@ namespace Template_P3 {
         // initialize
         public void Init()
 	    {
+		    wood = new Texture( "../../assets/wood.jpg" );            
             // load meshes
             initMeshes();
             // initialize stopwatch
@@ -37,7 +38,7 @@ namespace Template_P3 {
 		    shader = new Shader( "../../shaders/vs.glsl", "../../shaders/fs.glsl" );
 		    postproc = new Shader( "../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl" );
 		    // load a texture
-		    wood = new Texture( "../../assets/wood.jpg" );
+
 		    // create the render target
 		    target = new RenderTarget( screen.width, screen.height );
 		    quad = new ScreenQuad();
@@ -55,6 +56,9 @@ namespace Template_P3 {
 
             floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
             mesh.Parent = floor;
+
+            floor.texture = wood;
+            mesh.texture = wood;
         }
 
 	    // tick for background surface
@@ -123,7 +127,7 @@ namespace Template_P3 {
 
                 // render scene to render target
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
-                    scenegraph.meshTree[i].Render(shader, scenegraph.meshTree[i].transform, wood);
+                    scenegraph.meshTree[i].Render(shader);
 
 			    // render quad
 			    target.Unbind();
@@ -133,7 +137,7 @@ namespace Template_P3 {
 		    {
                 // render scene directly to the screen
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
-                    scenegraph.meshTree[i].Render(shader, scenegraph.meshTree[i].transform, wood);
+                    scenegraph.meshTree[i].Render(shader);
             }
 	    }
     }
