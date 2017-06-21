@@ -20,6 +20,7 @@ public class Sprite
 	}
 	public void Draw( float x, float y, float scale = 1.0f )
 	{
+
 		GL.BindTexture( TextureTarget.Texture2D, textureID );
 		GL.Enable( EnableCap.Blend );
 		GL.BlendFunc( BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha );

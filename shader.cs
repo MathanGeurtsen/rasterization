@@ -16,6 +16,7 @@ public class Shader
 	// constructor
 	public Shader( String vertexShader, String fragmentShader )
 	{
+            
 		// compile shaders
 		programID = GL.CreateProgram();
 		Load( vertexShader, ShaderType.VertexShader, programID, out vsID );
