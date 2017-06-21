@@ -20,6 +20,7 @@ namespace Template_P3 {
         public Matrix4 modelMatrix;             // model matrix
         public Matrix4 transform;               // tranform for obj
         public Texture texture;                 // texture for obj
+        public string name;
 
 
 	    // constructor
@@ -28,6 +29,7 @@ namespace Template_P3 {
 		    MeshLoader loader = new MeshLoader();
 		    loader.Load( this, fileName );
             modelMatrix = Matrix4.Identity;
+            name = "the_Bikker";
 	    }
 
 	    // initialization; called during first render

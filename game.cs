@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -53,6 +54,7 @@ namespace Template_P3 {
         public void initTextures()
         {
             wood = new Texture("../../assets/wood.jpg");
+            
         }
 
         public void initMeshes()
@@ -62,16 +64,84 @@ namespace Template_P3 {
 
             floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
             mesh.Parent = floor;
-
+            
             floor.texture = wood;
             mesh.texture = wood;
+
+            floor.name = "floor";
+        }
+
+        public void printObjTree()
+        {
+            for (int i = 0; i < scenegraph.meshTree.Count; i++)
+                if (scenegraph.meshTree[i].Parent == null)
+                    printObjTreeRecur(scenegraph.meshTree[i], 0);
+            System.Threading.Thread.Sleep(500);
+        }
+
+        public void printObjTreeRecur(Mesh mesh, int depth)
+        {
+            for (int i = 0; i < scenegraph.meshTree.Count; i++)
+            {
+                if (scenegraph.meshTree[i].Parent == mesh)
+                    printObjTreeRecur(scenegraph.meshTree[i], depth + 1);
+            }
+            for (int i = 0; i < depth; i++)
+            {
+                if (i == 0)
+                    Console.Write('+');
+                Console.Write("--");
+            }
+
+            Console.Write(mesh.name + '\n');
+        }
+
+        public void selectMesh(OpenTK.Input.KeyboardState keystate)
+        {
+            Console.WriteLine("<" + scenegraph.meshTree[0].name + ">");
+            int i = 0;
+            while (!keystate[OpenTK.Input.Key.Escape])
+            {
+                keystate = OpenTK.Input.Keyboard.GetState();
+
+                if (keystate[OpenTK.Input.Key.Comma] && i > 0)
+                {
+                    i--;
+                    writeSelectMesh(scenegraph.meshTree[i].name);
+                    System.Threading.Thread.Sleep(500);
+                }
+                if (keystate[OpenTK.Input.Key.Period] && i < scenegraph.meshTree.Count - 1)
+                {
+                    i++;
+                    writeSelectMesh(scenegraph.meshTree[i].name);
+                    System.Threading.Thread.Sleep(500);
+                }
+                if (keystate[OpenTK.Input.Key.Period] && i == scenegraph.meshTree.Count - 1)
+                {
+                    writeSelectMesh("New Object");
+                    System.Threading.Thread.Sleep(500);
+                }
+                /*if (keystate[OpenTK.Input.Key.Enter] && i == scenegraph.meshTree.Count - 1)
+                {
+                    writeSelectMesh("New Object");
+                    System.Threading.Thread.Sleep(500);
+                }*/
+
+            }
+        }
+
+        public void writeSelectMesh(string name)
+        {
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            Console.WriteLine("<" + name + ">");
         }
 
 	    // tick for background surface
 	    public void Tick()
 	    {
 		    screen.Clear( 0 );
-		    screen.Print( speed.ToString(), 2, 2, 0xffff00 );
             control();
 	    }
 
@@ -103,6 +173,11 @@ namespace Template_P3 {
 
             if (keystate[OpenTK.Input.Key.R])
                 scenegraph.reset();
+            if (keystate[OpenTK.Input.Key.P])
+                printObjTree();
+
+            if (keystate[OpenTK.Input.Key.I])
+                selectMesh(keystate);
 
             if (keystate[OpenTK.Input.Key.KeypadAdd] || keystate[OpenTK.Input.Key.Plus])
                 speed += 0.1f;
