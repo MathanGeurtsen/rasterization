@@ -27,11 +27,8 @@ namespace Template_P3 {
         // initialize
         public void Init()
 	    {
-		    // load teapot
-		    mesh = new Mesh( "../../assets/teapot.obj" );
-		    floor = new Mesh( "../../assets/floor.obj" );
-            mesh.Parent = floor;
-            floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
+            // load meshes
+            initMeshes();
             // initialize stopwatch
             timer = new Stopwatch();
 		    timer.Reset();
@@ -50,6 +47,15 @@ namespace Template_P3 {
             scenegraph.meshTree.Add(mesh);
             scenegraph.Render();
    	    }
+
+        public void initMeshes()
+        {
+		    mesh = new Mesh( "../../assets/teapot.obj" );
+		    floor = new Mesh( "../../assets/floor.obj" );
+
+            floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
+            mesh.Parent = floor;
+        }
 
 	    // tick for background surface
 	    public void Tick()
@@ -77,13 +83,16 @@ namespace Template_P3 {
                 scenegraph.move(new Vector3(0, 0.5f, 0) * speed);
 
             if (keystate[OpenTK.Input.Key.Up])
-                scenegraph.rotate(new Vector3(1, 0, 0));
-            if (keystate[OpenTK.Input.Key.Down])
                 scenegraph.rotate(new Vector3(-1, 0, 0));
+            if (keystate[OpenTK.Input.Key.Down])
+                scenegraph.rotate(new Vector3(1, 0, 0));
             if (keystate[OpenTK.Input.Key.Left])
                 scenegraph.rotate(new Vector3(0, -1, 0));
             if (keystate[OpenTK.Input.Key.Right])
                 scenegraph.rotate(new Vector3(0, 1, 0));
+
+            if (keystate[OpenTK.Input.Key.R])
+                scenegraph.reset();
 
             if (keystate[OpenTK.Input.Key.KeypadAdd] || keystate[OpenTK.Input.Key.Plus])
                 speed += 0.1f;

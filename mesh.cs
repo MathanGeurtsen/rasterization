@@ -18,7 +18,6 @@ namespace Template_P3 {
 	    int quadBufferId;                       // quad buffer
         public Mesh Parent;                     // parent mesh
         public Matrix4 modelMatrix;             // model matrix
-        public Matrix4 viewMatrix;              // view matrix
         public Matrix4 transform;               // tranform for obj
 
 	    // constructor
@@ -27,7 +26,6 @@ namespace Template_P3 {
 		    MeshLoader loader = new MeshLoader();
 		    loader.Load( this, fileName );
             modelMatrix = Matrix4.Identity;
-            viewMatrix = Matrix4.Identity;
 	    }
 
 	    // initialization; called during first render

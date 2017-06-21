@@ -9,6 +9,7 @@ namespace Template_P3
         const float PI = 3.1415926535f;
         public List<Mesh> meshTree;
         public Matrix4 projectionMatrix;
+        public Matrix4 viewMatrix = Matrix4.Identity;
 
         public SceneGraph()
         {
@@ -32,24 +33,23 @@ namespace Template_P3
         public void transform()
         {
             for (int i = 0; i < meshTree.Count; i++)
-                meshTree[i].transform = meshTree[i].modelMatrix * meshTree[i].viewMatrix * projectionMatrix;
+                meshTree[i].transform = meshTree[i].modelMatrix * viewMatrix * projectionMatrix;
         }
 
         public void move(Vector3 movement)
         {
             for (int i = 0; i < meshTree.Count; i++)
-                meshTree[i].viewMatrix *= Matrix4.Translation(movement);
+                viewMatrix *= Matrix4.Translation(movement);
         }
 
         public void rotate(Vector3 rotation)
         {
-            for (int i = 0; i < meshTree.Count; i++)
-            {
-                Vector3 tempVector = new Vector3(meshTree[i].viewMatrix.Column3.W, meshTree[i].viewMatrix.Column3.X, meshTree[i].viewMatrix.Column3.Y);
-                meshTree[i].viewMatrix *= Matrix4.Translation(-tempVector);
-                meshTree[i].viewMatrix *= Matrix4.Rotate(rotation, PI / 180);
-                meshTree[i].viewMatrix *= Matrix4.Translation(tempVector);
-            }
+            viewMatrix *= Matrix4.Rotate(rotation, PI / 180);
+        }
+
+        public void reset()
+        {
+            viewMatrix = Matrix4.Identity;
         }
     }
 }
