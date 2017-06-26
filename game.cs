@@ -24,7 +24,7 @@ namespace Template_P3 {
 	    ScreenQuad quad;				// screen filling quad for post processing
 	    bool useRenderTarget = true;
         SceneGraph scenegraph;          // scene graph containing all models
-        float speed = 1f;               // camera movementspeed modifier
+        float speed = 3f;               // camera movementspeed modifier
 
         // initialize
         public void Init()
@@ -72,21 +72,26 @@ namespace Template_P3 {
             floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
             
 
-            earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);
-            earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -600);
            
-            moon.modelMatrix = Matrix4.CreateTranslation(-600, 0, 0);
+            earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -600);
+            earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);
+
+            moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
+
+            
+            teapot.modelMatrix *= Matrix4.CreateTranslation(700, 0, 0 );
+            teapot.modelMatrix *= Matrix4.Rotate(new Vector3(1, 0, 0), PI);
+
 
             // setting parents
-
             teapot.Parent = earth;
             moon.Parent = earth;
 
             // setting textures
             floor.texture = wood;
-            teapot.texture = the_bikker;
+            teapot.texture = marble;
             earth.texture = earthTexture;
-            moon.texture = the_bikker;
+            moon.texture = moonTexture;
 
             // adding names for showing the tree structure
             teapot.name = "floor";

@@ -66,7 +66,7 @@ namespace Template_P3 {
                            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, 
                            PixelType.UnsignedByte, game.screen.pixels 
                            );
-            // GL.Clear( ClearBufferMask.ColorBufferBit ); /* not needed */
+            
             GL.MatrixMode( MatrixMode.Modelview );
             GL.LoadIdentity();
             GL.MatrixMode( MatrixMode.Projection );
