@@ -48,9 +48,9 @@ namespace Template_P3
             {
 
                 if (meshTree[i].Parent != null)
-                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].draaiSpeed) * meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * meshTree[i].rotationSpeed) * meshTree[i].Parent.transform;
+                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * meshTree[i].ParentRotation) * meshTree[i].Parent.transform;
                 else
-                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].draaiSpeed) * meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
+                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
             }
             a += 0.01f;
         }//transform()

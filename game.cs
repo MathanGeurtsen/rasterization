@@ -19,7 +19,7 @@ namespace Template_P3 {
 	    Stopwatch timer;				// timer for measuring frame duration
 	    Shader shader;					// shader to use for rendering
 	    Shader postproc;				// shader to use for post processing
-	    Texture wood, iron, marble, earthTexture, moonTexture, the_bikker;   // texture to use for rendering
+	    Texture wood, iron, marble, earthDayTexture, earthNightTexture, moonTexture, the_bikker;   // texture to use for rendering
 	    RenderTarget target;			// intermediate render target
 	    ScreenQuad quad;				// screen filling quad for post processing
 	    bool useRenderTarget = true;
@@ -54,7 +54,8 @@ namespace Template_P3 {
             wood         = new Texture("../../assets/wood.jpg");
             iron         = new Texture("../../assets/iron.jpg");
             marble       = new Texture("../../assets/marble.jpg");
-            earthTexture = new Texture("../../assets/earthTextures/4096_earth.jpg");
+            earthDayTexture = new Texture("../../assets/earthTextures/4096_earth.jpg");
+            earthNightTexture = new Texture("../../assets/earthTextures/4096_night_lights.jpg");
             moonTexture = new Texture("../../assets/MoonMap2_2500x1250.jpg");
             the_bikker = new Texture("../../assets/the_bikker.png");
         }//initTextures()
@@ -69,19 +70,19 @@ namespace Template_P3 {
             moon = new Mesh("../../assets/moon.obj");
 
             // setting translation and rotation matrices
+
             floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
-            //mesh.Parent = floor;
-           
+            floor.Axisrotation = 0;
+            floor.ParentRotation = 0;
+            
             earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -600);
             earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);
 
             moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
-            moon.rotationSpeed = 0.75f;
-            moon.draaiSpeed = 0;
+            moon.ParentRotation = 0.75f;
+            moon.Axisrotation = 0;
 
-            teapot.rotationSpeed = 2f;
-
-            
+            teapot.ParentRotation = 2f;
             teapot.modelMatrix *= Matrix4.CreateTranslation(-100, 0, 0 );
             teapot.modelMatrix *= Matrix4.Rotate(new Vector3(1, 0, 0), PI/2);
 
@@ -93,17 +94,18 @@ namespace Template_P3 {
             // setting textures
             floor.texture = wood;
             teapot.texture = marble;
-            earth.texture = earthTexture;
+            earth.texture = earthDayTexture;
+            earth.texture = earthNightTexture;
             moon.texture = moonTexture;
 
             // adding names for showing the tree structure
-            teapot.name = "floor";
-            floor.name = "floor";
-            earth.name = "earth";
-            moon.name = "moon";
+            teapot.name = "teapot";
+            floor.name  = "floor";
+            earth.name  = "earth";
+            moon.name   = "moon";
 
             // adding meshes to the meshTree
-            //scenegraph.meshTree.Add(floor);
+            scenegraph.meshTree.Add(floor);
             scenegraph.meshTree.Add(teapot);
             scenegraph.meshTree.Add(earth);
             scenegraph.meshTree.Add(moon);

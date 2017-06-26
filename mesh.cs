@@ -23,8 +23,8 @@ namespace Template_P3 {
         internal Texture usedTexture;           // texture
         public Texture texture;                 // texture for obj
         public string name;
-        public float rotationSpeed;
-        public float draaiSpeed;
+        public float ParentRotation;
+        public float Axisrotation;
 
         // constructor
         public Mesh( string fileName )
@@ -33,8 +33,8 @@ namespace Template_P3 {
 		    loader.Load( this, fileName );
             modelMatrix = Matrix4.Identity;
             name = "the_Bikker";
-            rotationSpeed = 0.25f;
-            draaiSpeed = 0.5f;
+            ParentRotation = 0.25f;
+            Axisrotation = 0.5f;
 	    }
 
 	    // initialization; called during first render
