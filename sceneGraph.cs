@@ -10,6 +10,9 @@ namespace Template_P3
         public List<Mesh> meshTree;
         public Matrix4 projectionMatrix;
 
+        static public Vector3 lightPos = new Vector3(5, 0, -10);
+        public Matrix4 modellightPos = Matrix4.CreateTranslation(lightPos);
+
         public SceneGraph()
         {
             meshTree = new List<Mesh>();
@@ -39,6 +42,9 @@ namespace Template_P3
         {
             for (int i = 0; i < meshTree.Count; i++)
                 meshTree[i].viewMatrix *= Matrix4.Translation(movement);
+            modellightPos *= Matrix4.Translation(movement);
+
+            //lightPos = modellightPos.
         }
 
         public void rotate(Vector3 rotation)

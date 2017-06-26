@@ -45,7 +45,7 @@ namespace Template_P3 {
             scenegraph = new SceneGraph();
 
             // adding meshes
-            addmesh("../../assets/floor.obj", wood, Matrix4.CreateTranslation(0, -4, -15));
+            addmesh("../../assets/floor.obj", wood, Matrix4.CreateTranslation(0, 0, 0));
             addmesh("../../assets/car.obj", iron, Matrix4.CreateTranslation(0, 0, -200));
             // teapot init with method
             addmesh("../../assets/teapot.obj", marble, scenegraph.meshTree[0]);
