@@ -12,7 +12,6 @@ namespace Template_P3
         public Matrix4 viewMatrix2 = Matrix4.Identity;          // matrix for X-axis rotation
         static public Vector3 lightPos = new Vector3(5, 0, -10);
         public Matrix4 modellightPos = Matrix4.CreateTranslation(lightPos);
-        const float PI = 3.1415926535f;	// PI
         float a = 0.001f;
 
         // Constructor
@@ -49,12 +48,11 @@ namespace Template_P3
             {
 
                 if (meshTree[i].Parent != null)
-                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].rotationSpeed) * meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * meshTree[i].rotationSpeed) * meshTree[i].Parent.transform;
+                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].draaiSpeed) * meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * meshTree[i].rotationSpeed) * meshTree[i].Parent.transform;
                 else
-                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].rotationSpeed) * meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
+                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].draaiSpeed) * meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
             }
             a += 0.01f;
-            if (a > 2 * PI) a -= 2 * PI;
         }//transform()
 
         // function to change the viewMatrix as to "move the camera"

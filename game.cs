@@ -76,11 +76,14 @@ namespace Template_P3 {
             earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);
 
             moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
-            moon.rotationSpeed = 0f;
+            moon.rotationSpeed = 0.75f;
+            moon.draaiSpeed = 0;
+
+            teapot.rotationSpeed = 2f;
 
             
             teapot.modelMatrix *= Matrix4.CreateTranslation(-100, 0, 0 );
-            teapot.modelMatrix *= Matrix4.Rotate(new Vector3(1, 0, 0), PI);
+            teapot.modelMatrix *= Matrix4.Rotate(new Vector3(1, 0, 0), PI/2);
 
 
             // setting parents
