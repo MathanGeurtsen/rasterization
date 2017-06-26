@@ -77,10 +77,10 @@ namespace Template_P3 {
             floor.Axisrotation = 0;
             floor.ParentRotation = 0;
             
-            earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -600);
+            earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -800);
             earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);
             earth.ParentRotation = 0;
-            earth.Axisrotation = .08f;
+            earth.Axisrotation = .2f;
 
             moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
             moon.ParentRotation = 0.1f;
