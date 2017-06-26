@@ -18,9 +18,10 @@ namespace Template_P3 {
 	    int quadBufferId;                       // quad buffer
         public Mesh Parent;                     // parent mesh
         public Matrix4 modelMatrix;             // model matrix
-        public Matrix4 viewMatrix;              // view matrix
         public Matrix4 transform;               // tranform for obj
         internal Texture usedTexture;           // texture
+        public Texture texture;                 // texture for obj
+        public string name;
 
         // constructor
         public Mesh( string fileName )
@@ -28,7 +29,7 @@ namespace Template_P3 {
 		    MeshLoader loader = new MeshLoader();
 		    loader.Load( this, fileName );
             modelMatrix = Matrix4.Identity;
-            viewMatrix = Matrix4.Identity;
+            name = "the_Bikker";
 	    }
 
 	    // initialization; called during first render
@@ -53,7 +54,7 @@ namespace Template_P3 {
 	    }
 
 	    // render the mesh using the supplied shader and matrix
-	    public void Render( Shader shader, Matrix4 transform, Texture texture )
+	    public void Render( Shader shader )
 	    {
 		    // on first run, prepare buffers
 		    Prepare( shader );
