@@ -25,10 +25,15 @@ namespace Template_P3 {
 	    bool useRenderTarget = true;
         SceneGraph scenegraph;                  // scene graph containing all models
         float speed = 1f;                       // camera movementspeed modifier
+        Light light1, light2;
 
         // initialize
         public void Init()
 	    {
+            // create shaders
+            shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
+            postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
+            scenegraph = new SceneGraph();
             // load textures
             initTextures();
             // load meshes
@@ -37,14 +42,10 @@ namespace Template_P3 {
             timer = new Stopwatch();
 		    timer.Reset();
 		    timer.Start();
-		    // create shaders
-		    shader = new Shader( "../../shaders/vs.glsl", "../../shaders/fs.glsl" );
-		    postproc = new Shader( "../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl" );
 		    // create the render target
 		    target = new RenderTarget( screen.width, screen.height);
 		    quad = new ScreenQuad();
             // create scene graph
-            scenegraph = new SceneGraph();
             scenegraph.meshTree.Add(floor);
             scenegraph.meshTree.Add(mesh);
             scenegraph.render();
@@ -69,6 +70,16 @@ namespace Template_P3 {
             mesh.texture = wood;
 
             floor.name = "floor";
+
+            //lights
+            light1 = new Light(shader.uniform_lightpos1);
+            light1.modelMatrix = Matrix4.CreateTranslation(10, 0, 0);
+
+            light2 = new Light(shader.uniform_lightpos2);
+            light2.modelMatrix = Matrix4.CreateTranslation(-5, 10, 0);
+
+            scenegraph.lights.Add(light1);
+            scenegraph.lights.Add(light2);
         }//initMeshes()
 
         // prints all meshes as an upside-down tree structure
@@ -165,7 +176,9 @@ namespace Template_P3 {
             // prepare matrix for vertex shader
             scenegraph.transform();
 
-		    // update rotation
+            // update rotation
+            light1.Render(shader);
+            light2.Render(shader);
 
 		    if (useRenderTarget)
 		    {

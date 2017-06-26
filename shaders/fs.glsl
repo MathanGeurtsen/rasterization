@@ -9,10 +9,10 @@ in vec3 worldPos; // fragment position in worldspace
 uniform sampler2D pixels;		// texture sampler
 
 float ambientLight = 0.1f;
-uniform vec3 lightPos; 
+uniform mat4 lightPos1;
+uniform mat4 lightPos2;
 uniform vec3 cameraPos = vec3(0,0,0);
 vec3 lightColor = vec3(1,1,1);
-
 float specularStrength = 0.5;
 
 // shader output
@@ -22,9 +22,10 @@ out vec4 outputColor;
 void main()
 {
     vec3 norm = normalize(normal.xyz);
+	vec3 lightp1 = vec3(lightPos1[3][0], lightPos1[3][1], lightPos1[3][2]);
 
     // diffuse lighting
-    vec3 lightDir = normalize(lightPos - worldPos);
+    vec3 lightDir = normalize(lightp1 - worldPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
 				

@@ -5,24 +5,28 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Template_P3
 {
-    class Light
+    public class Light
     {
         // data members
         public Mesh Parent;                     // parent mesh
         public Matrix4 modelMatrix;             // model matrix
         public Matrix4 transform;               // tranform for obj
         public string name;
+        public int lightpos;
 
         // constructor
-        public Light()
+        public Light(int lightp)
         {
             modelMatrix = Matrix4.Identity;
-            name = "Light1";
+            transform = Matrix4.Identity;
+            name = "Light";
+            lightpos = lightp;
         }
 
         public void Render(Shader shader)
         {
-            GL.UniformMatrix4(shader.uniform_lightpos, false, ref transform);
+            GL.UseProgram(shader.programID);
+            GL.UniformMatrix4(lightpos, false, ref transform);
         }
     }
 }

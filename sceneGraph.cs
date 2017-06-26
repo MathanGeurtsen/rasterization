@@ -1,22 +1,23 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using OpenTK;
+using System;
 
 namespace Template_P3
 {
     public class SceneGraph
     {
         public List<Mesh> meshTree;                             // List of all meshes
+        public List<Light> lights;                              // List of all lights (non tree like)
         public Matrix4 projectionMatrix;                        // matrix for FOV
         public Matrix4 viewMatrix = Matrix4.Identity;           // matrix for movement and Y-axis rotation
         public Matrix4 viewMatrix2 = Matrix4.Identity;          // matrix for X-axis rotation
-        static public Vector3 lightPos = new Vector3(5, 0, -10);
-        public Matrix4 modellightPos = Matrix4.CreateTranslation(lightPos);
 
         // Constructor
         public SceneGraph()
         {
             meshTree = new List<Mesh>();
+            lights = new List<Light>();
             projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
         }//SceneGraph()
 
@@ -40,6 +41,8 @@ namespace Template_P3
         {
             for (int i = 0; i < meshTree.Count; i++)
                 meshTree[i].transform = meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
+            for (int i = 0; i < lights.Count; i++)
+                lights[i].transform = lights[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
         }//transform()
 
         // function to change the viewMatrix as to "move the camera"
@@ -47,7 +50,6 @@ namespace Template_P3
         {
             for (int i = 0; i < meshTree.Count; i++)
                 viewMatrix *= Matrix4.Translation(movement);
-            modellightPos *= Matrix4.Translation(movement);
         }//move()
 
 
