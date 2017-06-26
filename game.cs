@@ -40,8 +40,6 @@ namespace Template_P3 {
 		    // create shaders
 		    shader = new Shader( "../../shaders/vs.glsl", "../../shaders/fs.glsl" );
 		    postproc = new Shader( "../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl" );
-		    // load a texture
-
 		    // create the render target
 		    target = new RenderTarget( screen.width, screen.height);
 		    quad = new ScreenQuad();
@@ -49,15 +47,16 @@ namespace Template_P3 {
             scenegraph = new SceneGraph();
             scenegraph.meshTree.Add(floor);
             scenegraph.meshTree.Add(mesh);
-            scenegraph.Render();
-   	    }
+            scenegraph.render();
+   	    }//Init
 
+        // initializes all textures
         public void initTextures()
         {
             wood = new Texture("../../assets/wood.jpg");
-            
-        }
+        }//initTextures()
 
+        // initializes all meshes
         public void initMeshes()
         {
 		    mesh = new Mesh( "../../assets/teapot.obj" );
@@ -70,40 +69,36 @@ namespace Template_P3 {
             mesh.texture = wood;
 
             floor.name = "floor";
-        }
+        }//initMeshes()
 
+        // prints all meshes as an upside-down tree structure
         public void printObjTree()
         {
             for (int i = 0; i < scenegraph.meshTree.Count; i++)
                 if (scenegraph.meshTree[i].Parent == null)
                     printObjTreeRecur(scenegraph.meshTree[i], 0);
-            System.Threading.Thread.Sleep(500);
-        }
+            System.Threading.Thread.Sleep(500); // sleep function as to not spam the console when someone presses the button a bit too long
+        }//printObjTree()
 
+        // recursive part of printObjTree() as to find all childs for each mesh
         public void printObjTreeRecur(Mesh mesh, int depth)
         {
             for (int i = 0; i < scenegraph.meshTree.Count; i++)
-            {
                 if (scenegraph.meshTree[i].Parent == mesh)
                     printObjTreeRecur(scenegraph.meshTree[i], depth + 1);
-            }
             for (int i = 0; i < depth; i++)
-            {
-                if (i == 0)
-                    Console.Write('+');
-                Console.Write("--");
-            }
-
-            Console.Write(mesh.name + '\n');
-        }
+                Console.Write("  ");
+            Console.Write("+--" + mesh.name + '\n');
+        }//printObjeTreeRecur()
 
 	    // tick for background surface
 	    public void Tick()
 	    {
 		    screen.Clear( 0 );
             control();
-	    }
+	    }//Tick()
 
+        // Keypress handlers
         public void control()
         {
             var keystate = OpenTK.Input.Keyboard.GetState();
@@ -142,7 +137,7 @@ namespace Template_P3 {
 
             if (speed < 0)
                 speed = 0;
-        }
+        }//control()
 
 	    // tick for OpenGL rendering code
 	    public void RenderGL()
@@ -169,14 +164,14 @@ namespace Template_P3 {
 			    // render quad
 			    target.Unbind();
 			    quad.Render( postproc, target.GetTextureID() );
-		    }
+		    }// if
 		    else
 		    {
                 // render scene directly to the screen
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
                     scenegraph.meshTree[i].Render(shader);
-            }
-	    }
+            }// else
+	    }//RenderGL()
     }
 
 

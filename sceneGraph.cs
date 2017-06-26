@@ -6,57 +6,65 @@ namespace Template_P3
 {
     public class SceneGraph
     {
-        public List<Mesh> meshTree;
-        public Matrix4 projectionMatrix;
-        public Matrix4 viewMatrix2 = Matrix4.Identity;
-        public Matrix4 viewMatrix = Matrix4.Identity;
+        public List<Mesh> meshTree;                             // List of all meshes
+        public Matrix4 projectionMatrix;                        // matrix for FOV
+        public Matrix4 viewMatrix = Matrix4.Identity;           // matrix for movement and Y-axis rotation
+        public Matrix4 viewMatrix2 = Matrix4.Identity;          // matrix for X-axis rotation
 
+        // Constructor
         public SceneGraph()
         {
             meshTree = new List<Mesh>();
             projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
-        }
+        }//SceneGraph()
 
-        public void Render()
+        // function to set modelMatrix for every mesh
+        public void render()
         {
             for (int i = 0; i < meshTree.Count; i++)
                 meshTree[i].modelMatrix = toWorldSpace(meshTree[i]);
-        }
+        }//render()
 
+        // function to transfrom a mesh's modelmatrix to correspond to it's parent's modelmatrix 
         public Matrix4 toWorldSpace(Mesh mesh)
         {
             if (mesh.Parent != null)
                 mesh.modelMatrix = toWorldSpace(mesh.Parent) * mesh.modelMatrix;
             return mesh.modelMatrix;
-        }
+        }//toWorldSpace()
 
+        // function to set the transform of all meshes
         public void transform()
         {
             for (int i = 0; i < meshTree.Count; i++)
                 meshTree[i].transform = meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
-        }
+        }//transform()
 
+        // function to change the viewMatrix as to "move the camera"
         public void move(Vector3 movement)
         {
             for (int i = 0; i < meshTree.Count; i++)
                 viewMatrix *= Matrix4.Translation(movement);
-        }
+        }//move()
 
+        // function to change the viewMatrix as to "rotate the camera around the X-axis"
         public void rotate(Vector3 rotation, float speed)
         {
             viewMatrix2 *= Matrix4.Rotate(rotation, speed);
-        }
+        }//rotate()
 
+        // function to change the viewMatrix as to "move the camera around the Y-axis"
         public void rotateHorizontal(Vector3 rotation, float speed)
         {
             viewMatrix *= Matrix4.Rotate(rotation, speed);
-        }
+        }//rotateHorizontal()
 
+        // changes the viewMatrix to default
         public void reset()
         {
             viewMatrix = Matrix4.Identity;
             viewMatrix2 = Matrix4.Identity;
-        }
+        }//reset()
     }
 }
 
