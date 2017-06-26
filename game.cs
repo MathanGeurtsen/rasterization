@@ -78,12 +78,12 @@ namespace Template_P3 {
             moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
 
             
-            teapot.modelMatrix *= Matrix4.CreateTranslation(700, 0, 0 );
+            teapot.modelMatrix *= Matrix4.CreateTranslation(-100, 0, 0 );
             teapot.modelMatrix *= Matrix4.Rotate(new Vector3(1, 0, 0), PI);
 
 
             // setting parents
-            teapot.Parent = earth;
+            teapot.Parent = moon;
             moon.Parent = earth;
 
             // setting textures

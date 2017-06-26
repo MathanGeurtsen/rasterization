@@ -46,12 +46,11 @@ namespace Template_P3
         {
             for (int i = 0; i < meshTree.Count; i++)
             {
-                
+
                 if (meshTree[i].Parent != null)
-                    meshTree[i].transform = meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a) * meshTree[i].Parent.modelMatrix;
+                    meshTree[i].transform = meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a) * meshTree[i].Parent.transform;
                 else
-                    meshTree[i].transform = meshTree[i].modelMatrix;
-                meshTree[i].transform *= viewMatrix * viewMatrix2 * projectionMatrix;
+                    meshTree[i].transform = meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix; ;
             }
             a += 0.01f;
         }//transform()
