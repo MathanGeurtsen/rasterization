@@ -63,15 +63,14 @@ namespace Template_P3 {
         public void initMeshes()
         {
             // adding objects
-		    teapot = new Mesh( "../../assets/teapot.obj" );
-		    floor = new Mesh( "../../assets/floor.obj" );
+            teapot = new Mesh( "../../assets/teapot.obj" );
+            floor = new Mesh( "../../assets/floor.obj" );
             earth = new Mesh("../../assets/earth.obj");
             moon = new Mesh("../../assets/moon.obj");
 
             // setting translation and rotation matrices
             floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
-            
-
+            //mesh.Parent = floor;
            
             earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -600);
             earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);

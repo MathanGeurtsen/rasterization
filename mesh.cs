@@ -18,6 +18,7 @@ namespace Template_P3 {
 	    int quadBufferId;                       // quad buffer
         public Mesh Parent;                     // parent mesh
         public Matrix4 modelMatrix;             // model matrix
+        public Matrix4 initialModelMatrix;      // model matrix for use in rotations
         public Matrix4 transform;               // tranform for obj
         internal Texture usedTexture;           // texture
         public Texture texture;                 // texture for obj

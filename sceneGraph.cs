@@ -12,19 +12,25 @@ namespace Template_P3
         public Matrix4 viewMatrix2 = Matrix4.Identity;          // matrix for X-axis rotation
         static public Vector3 lightPos = new Vector3(5, 0, -10);
         public Matrix4 modellightPos = Matrix4.CreateTranslation(lightPos);
+        float a = 0.001f;
 
         // Constructor
         public SceneGraph()
         {
             meshTree = new List<Mesh>();
             projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+            a = 0;
         }//SceneGraph()
 
         // function to set modelMatrix for every mesh
         public void render()
         {
             for (int i = 0; i < meshTree.Count; i++)
+            {
+                meshTree[i].initialModelMatrix = meshTree[i].modelMatrix;
                 meshTree[i].modelMatrix = toWorldSpace(meshTree[i]);
+            }
+
         }//render()
 
         // function to transfrom a mesh's modelmatrix to correspond to it's parent's modelmatrix 
@@ -39,7 +45,15 @@ namespace Template_P3
         public void transform()
         {
             for (int i = 0; i < meshTree.Count; i++)
-                meshTree[i].transform = meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
+            {
+                
+                if (meshTree[i].Parent != null)
+                    meshTree[i].transform = meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a) * meshTree[i].Parent.modelMatrix;
+                else
+                    meshTree[i].transform = meshTree[i].modelMatrix;
+                meshTree[i].transform *= viewMatrix * viewMatrix2 * projectionMatrix;
+            }
+            a += 0.01f;
         }//transform()
 
         // function to change the viewMatrix as to "move the camera"
