@@ -62,7 +62,9 @@ namespace Template_P3 {
 		    mesh = new Mesh( "../../assets/teapot.obj" );
 		    floor = new Mesh( "../../assets/floor.obj" );
 
-            floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
+            floor.modelMatrix = Matrix4.CreateTranslation(50, -4, -50);
+            mesh.modelMatrix = Matrix4.CreateTranslation(0, 0, -20);
+
             mesh.Parent = floor;
             
             floor.texture = wood;
