@@ -13,22 +13,24 @@ namespace Template_P3 {
     class Game
     {
 	    // member variables
-	    public Surface screen;					// background surface for printing etc.
-	    Mesh mesh, floor, teapot, vloer;		// a mesh to draw using OpenGL
-	    const float PI = 3.1415926535f;			// PI
-	    Stopwatch timer;						// timer for measuring frame duration
-	    Shader shader;							// shader to use for rendering
-	    Shader postproc;						// shader to use for post processing
-	    Texture wood;							// texture to use for rendering
-	    RenderTarget target;					// intermediate render target
-	    ScreenQuad quad;						// screen filling quad for post processing
+	    public Surface screen;					    // background surface for printing etc.
+	    Mesh teapot, floor, earth;		            // a mesh to draw using OpenGL
+	    const float PI = 3.1415926535f;			    // PI
+	    Stopwatch timer;						    // timer for measuring frame duration
+	    Shader shader;							    // shader to use for rendering
+	    Shader postproc;						    // shader to use for post processing
+	    Texture wood, iron, marble, earthTexture;   // texture to use for rendering
+	    RenderTarget target;					    // intermediate render target
+	    ScreenQuad quad;						    // screen filling quad for post processing
 	    bool useRenderTarget = true;
-        SceneGraph scenegraph;                  // scene graph containing all models
-        float speed = 1f;                       // camera movementspeed modifier
+        SceneGraph scenegraph;                      // scene graph containing all models
+        float speed = 1f;                           // camera movementspeed modifier
 
         // initialize
         public void Init()
 	    {
+            // create scene graph
+            scenegraph = new SceneGraph();
             // load textures
             initTextures();
             // load meshes
@@ -43,32 +45,44 @@ namespace Template_P3 {
 		    // create the render target
 		    target = new RenderTarget( screen.width, screen.height);
 		    quad = new ScreenQuad();
-            // create scene graph
-            scenegraph = new SceneGraph();
-            scenegraph.meshTree.Add(floor);
-            scenegraph.meshTree.Add(mesh);
-            scenegraph.render();
+
    	    }//Init
 
         // initializes all textures
         public void initTextures()
         {
-            wood = new Texture("../../assets/wood.jpg");
+            wood         = new Texture("../../assets/wood.jpg");
+            iron         = new Texture("../../assets/iron.jpg");
+            marble       = new Texture("../../assets/marble.jpg");
+            earthTexture = new Texture("../../assets/earthTextures/4096_earth.jpg");
         }//initTextures()
 
         // initializes all meshes
         public void initMeshes()
         {
-		    mesh = new Mesh( "../../assets/teapot.obj" );
+            // adding objects
+		    teapot = new Mesh( "../../assets/teapot.obj" );
 		    floor = new Mesh( "../../assets/floor.obj" );
+            earth = new Mesh("../../assets/earth.obj");
 
+            // setting translation matrices or parents
             floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
-            mesh.Parent = floor;
-            
-            floor.texture = wood;
-            mesh.texture = wood;
+            teapot.Parent = floor;
+            earth.modelMatrix = Matrix4.CreateTranslation(0, -4, -400);
 
+            // setting textures
+            floor.texture = wood;
+            teapot.texture = marble;
+            earth.texture = earthTexture;
+
+            // adding names (could be used when later converting to a list of meshes instead of this format)
             floor.name = "floor";
+
+            // adding meshes to the meshTree
+            scenegraph.meshTree.Add(floor);
+            scenegraph.meshTree.Add(teapot);
+            scenegraph.meshTree.Add(earth);
+            scenegraph.render();
         }//initMeshes()
 
         // prints all meshes as an upside-down tree structure
