@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -13,7 +14,7 @@ namespace Template_P3 {
     {
 	    // member variables
 	    public Surface screen;					// background surface for printing etc.
-	    Mesh mesh, floor;						// a mesh to draw using OpenGL
+	    Mesh mesh, floor, teapot, vloer;		// a mesh to draw using OpenGL
 	    const float PI = 3.1415926535f;			// PI
 	    Stopwatch timer;						// timer for measuring frame duration
 	    Shader shader;							// shader to use for rendering
@@ -22,8 +23,8 @@ namespace Template_P3 {
 	    RenderTarget target;					// intermediate render target
 	    ScreenQuad quad;						// screen filling quad for post processing
 	    bool useRenderTarget = true;
-        SceneGraph scenegraph;
-        float speed = 1f;
+        SceneGraph scenegraph;                  // scene graph containing all models
+        float speed = 1f;                       // camera movementspeed modifier
 
         // initialize
         public void Init()
@@ -96,48 +97,6 @@ namespace Template_P3 {
             Console.Write(mesh.name + '\n');
         }
 
-        public void selectMesh(OpenTK.Input.KeyboardState keystate)
-        {
-            Console.WriteLine("<" + scenegraph.meshTree[0].name + ">");
-            int i = 0;
-            while (!keystate[OpenTK.Input.Key.Escape])
-            {
-                keystate = OpenTK.Input.Keyboard.GetState();
-
-                if (keystate[OpenTK.Input.Key.Comma] && i > 0)
-                {
-                    i--;
-                    writeSelectMesh(scenegraph.meshTree[i].name);
-                    System.Threading.Thread.Sleep(500);
-                }
-                if (keystate[OpenTK.Input.Key.Period] && i < scenegraph.meshTree.Count - 1)
-                {
-                    i++;
-                    writeSelectMesh(scenegraph.meshTree[i].name);
-                    System.Threading.Thread.Sleep(500);
-                }
-                if (keystate[OpenTK.Input.Key.Period] && i == scenegraph.meshTree.Count - 1)
-                {
-                    writeSelectMesh("New Object");
-                    System.Threading.Thread.Sleep(500);
-                }
-                /*if (keystate[OpenTK.Input.Key.Enter] && i == scenegraph.meshTree.Count - 1)
-                {
-                    writeSelectMesh("New Object");
-                    System.Threading.Thread.Sleep(500);
-                }*/
-
-            }
-        }
-
-        public void writeSelectMesh(string name)
-        {
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            Console.WriteLine("<" + name + ">");
-        }
-
 	    // tick for background surface
 	    public void Tick()
 	    {
@@ -163,21 +122,18 @@ namespace Template_P3 {
                 scenegraph.move(new Vector3(0, 0.5f, 0) * speed);
 
             if (keystate[OpenTK.Input.Key.Up])
-                scenegraph.rotate(new Vector3(-1, 0, 0));
+                scenegraph.rotate(new Vector3(-1, 0, 0), (PI / 120) * speed);
             if (keystate[OpenTK.Input.Key.Down])
-                scenegraph.rotate(new Vector3(1, 0, 0));
+                scenegraph.rotate(new Vector3(1, 0, 0), (PI / 120) * speed);
             if (keystate[OpenTK.Input.Key.Left])
-                scenegraph.rotate(new Vector3(0, -1, 0));
+                scenegraph.rotateHorizontal(new Vector3(0, -1, 0), (PI / 120) * speed);
             if (keystate[OpenTK.Input.Key.Right])
-                scenegraph.rotate(new Vector3(0, 1, 0));
+                scenegraph.rotateHorizontal(new Vector3(0, 1, 0), (PI / 120) * speed);
 
             if (keystate[OpenTK.Input.Key.R])
                 scenegraph.reset();
             if (keystate[OpenTK.Input.Key.P])
                 printObjTree();
-
-            if (keystate[OpenTK.Input.Key.I])
-                selectMesh(keystate);
 
             if (keystate[OpenTK.Input.Key.KeypadAdd] || keystate[OpenTK.Input.Key.Plus])
                 speed += 0.1f;

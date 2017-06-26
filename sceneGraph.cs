@@ -6,9 +6,9 @@ namespace Template_P3
 {
     public class SceneGraph
     {
-        const float PI = 3.1415926535f;
         public List<Mesh> meshTree;
         public Matrix4 projectionMatrix;
+        public Matrix4 viewMatrix2 = Matrix4.Identity;
         public Matrix4 viewMatrix = Matrix4.Identity;
 
         public SceneGraph()
@@ -33,7 +33,7 @@ namespace Template_P3
         public void transform()
         {
             for (int i = 0; i < meshTree.Count; i++)
-                meshTree[i].transform = meshTree[i].modelMatrix * viewMatrix * projectionMatrix;
+                meshTree[i].transform = meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
         }
 
         public void move(Vector3 movement)
@@ -42,14 +42,20 @@ namespace Template_P3
                 viewMatrix *= Matrix4.Translation(movement);
         }
 
-        public void rotate(Vector3 rotation)
+        public void rotate(Vector3 rotation, float speed)
         {
-            viewMatrix *= Matrix4.Rotate(rotation, PI / 180);
+            viewMatrix2 *= Matrix4.Rotate(rotation, speed);
+        }
+
+        public void rotateHorizontal(Vector3 rotation, float speed)
+        {
+            viewMatrix *= Matrix4.Rotate(rotation, speed);
         }
 
         public void reset()
         {
             viewMatrix = Matrix4.Identity;
+            viewMatrix2 = Matrix4.Identity;
         }
     }
 }
