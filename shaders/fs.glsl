@@ -26,12 +26,6 @@ void main()
     vec3 norm = normalize(normal.xyz);
 	vec3 lightp1 = vec3(lightPos1[3][0], lightPos1[3][1], lightPos1[3][2]);
 
-	lightColor = vec3(0,0,1);
-	if (origLightPos != lightp1)
-	{
-		lightColor = vec3(0,0,1);
-	}
-
     // diffuse lighting
     vec3 lightDir = normalize(lightp1 - worldPos);
     float diff = max(dot(norm, lightDir), 0.0);
