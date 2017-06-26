@@ -77,25 +77,29 @@ namespace Template_P3 {
             
             earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -600);
             earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);
+            earth.ParentRotation = 0;
+            earth.Axisrotation = .08f;
 
             moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
-            moon.ParentRotation = 0.75f;
+            moon.ParentRotation = 0.1f;
             moon.Axisrotation = 0;
 
-            teapot.ParentRotation = 2f;
-            teapot.modelMatrix *= Matrix4.CreateTranslation(-100, 0, 0 );
-            teapot.modelMatrix *= Matrix4.Rotate(new Vector3(1, 0, 0), PI/2);
+            teapot.ParentRotation = 0.1f;
+            teapot.Axisrotation = 0;
+            teapot.modelMatrix *= Matrix4.Rotate(new Vector3(-1, 1, 0), PI);
+            teapot.modelMatrix *= Matrix4.CreateTranslation(-658.5f, 0, 0);
+           
 
+            
 
             // setting parents
-            teapot.Parent = moon;
+            teapot.Parent = earth;
             moon.Parent = earth;
 
             // setting textures
             floor.texture = wood;
             teapot.texture = marble;
             earth.texture = earthDayTexture;
-            earth.texture = earthNightTexture;
             moon.texture = moonTexture;
 
             // adding names for showing the tree structure
