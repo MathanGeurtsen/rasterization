@@ -9,7 +9,7 @@ in vec3 worldPos; // fragment position in worldspace
 uniform sampler2D pixels;		// texture sampler
 
 float ambientLight = 0.1f;
-uniform vec3 lightPos = new vec3(-5,0,-10); 
+uniform vec3 lightPos; 
 uniform vec3 cameraPos = vec3(0,0,0);
 vec3 lightColor = vec3(1,1,1);
 
