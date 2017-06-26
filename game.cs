@@ -160,16 +160,16 @@ namespace Template_P3 {
 
             // Keypress to "turn camera upwards"
             if (keystate[OpenTK.Input.Key.Up])
-                scenegraph.rotate(new Vector3(-1, 0, 0), (PI / 120) * speed);
+                scenegraph.rotate(new Vector3(-1, 0, 0), (PI / 120) * speed/4);
             // Keypress to "turn camera downwards"
             if (keystate[OpenTK.Input.Key.Down])
-                scenegraph.rotate(new Vector3(1, 0, 0), (PI / 120) * speed);
+                scenegraph.rotate(new Vector3(1, 0, 0), (PI / 120) * speed/4);
             // Keypress to "turn camera to the left"
             if (keystate[OpenTK.Input.Key.Left])
-                scenegraph.rotateHorizontal(new Vector3(0, -1, 0), (PI / 120) * speed);
+                scenegraph.rotateHorizontal(new Vector3(0, -1, 0), (PI / 120) * speed/4);
             // Keypress to "turn camera to the right"
             if (keystate[OpenTK.Input.Key.Right])
-                scenegraph.rotateHorizontal(new Vector3(0, 1, 0), (PI / 120) * speed);
+                scenegraph.rotateHorizontal(new Vector3(0, 1, 0), (PI / 120) * speed/4);
 
             // Keypress to reset camera position
             if (keystate[OpenTK.Input.Key.R])

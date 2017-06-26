@@ -18,7 +18,7 @@ namespace Template_P3
         public SceneGraph()
         {
             meshTree = new List<Mesh>();
-            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 10000);
             a = 0;
         }//SceneGraph()
 
