@@ -101,40 +101,55 @@ namespace Template_P3 {
         // Keypress handlers
         public void control()
         {
-            var keystate = OpenTK.Input.Keyboard.GetState();
+            var keystate = OpenTK.Input.Keyboard.GetState(); //current input key
 
+            // Keypress to go forwards
             if (keystate[OpenTK.Input.Key.W])
                 scenegraph.move(new Vector3(0, 0, 0.5f) * speed);
+            // Keypress to go left
             if (keystate[OpenTK.Input.Key.A])
                 scenegraph.move(new Vector3(0.5f, 0, 0) * speed);
+            // Keypress to go backwards
             if (keystate[OpenTK.Input.Key.S])
                 scenegraph.move(new Vector3(0, 0, -0.5f) * speed);
+            // Keypress to go right
             if (keystate[OpenTK.Input.Key.D])
                 scenegraph.move(new Vector3(-0.5f, 0, 0) * speed);
+            // Keypress to go upwards
             if (keystate[OpenTK.Input.Key.Q])
                 scenegraph.move(new Vector3(0, -0.5f, 0) * speed);
+            // Keypress to go downwards
             if (keystate[OpenTK.Input.Key.E])
                 scenegraph.move(new Vector3(0, 0.5f, 0) * speed);
 
+            // Keypress to "turn camera upwards"
             if (keystate[OpenTK.Input.Key.Up])
                 scenegraph.rotate(new Vector3(-1, 0, 0), (PI / 120) * speed);
+            // Keypress to "turn camera downwards"
             if (keystate[OpenTK.Input.Key.Down])
                 scenegraph.rotate(new Vector3(1, 0, 0), (PI / 120) * speed);
+            // Keypress to "turn camera to the left"
             if (keystate[OpenTK.Input.Key.Left])
                 scenegraph.rotateHorizontal(new Vector3(0, -1, 0), (PI / 120) * speed);
+            // Keypress to "turn camera to the right"
             if (keystate[OpenTK.Input.Key.Right])
                 scenegraph.rotateHorizontal(new Vector3(0, 1, 0), (PI / 120) * speed);
 
+            // Keypress to reset camera position
             if (keystate[OpenTK.Input.Key.R])
                 scenegraph.reset();
+            // Keypress to print mesh tree in the console (note: it's upside down)
             if (keystate[OpenTK.Input.Key.P])
                 printObjTree();
 
+            // Keypress to speed up movement
             if (keystate[OpenTK.Input.Key.KeypadAdd] || keystate[OpenTK.Input.Key.Plus])
                 speed += 0.1f;
+            // Keypress to slow down movement
             if (keystate[OpenTK.Input.Key.KeypadMinus] || keystate[OpenTK.Input.Key.Minus])
                 speed -= 0.1f;
-
+            
+            // sets speed to 0 if it would become a negative value
             if (speed < 0)
                 speed = 0;
         }//control()
