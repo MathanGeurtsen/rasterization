@@ -26,7 +26,10 @@ namespace Template_P3
         public void Render(Shader shader)
         {
             GL.UseProgram(shader.programID);
-            GL.UniformMatrix4(shader.uniform_lightpos1, false, ref transform);
+            if (name == "light1")
+                GL.UniformMatrix4(shader.uniform_lightpos1, false, ref transform);
+            else if (name == "light2")
+                GL.UniformMatrix4(shader.uniform_lightpos2, false, ref transform);
         }
     }
 }

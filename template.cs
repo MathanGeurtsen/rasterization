@@ -22,6 +22,7 @@ namespace Template_P3 {
             ClientSize = new Size( 1280, 800 );
             game = new Game();
             game.screen = new Surface( Width, Height );
+            game.textureSurface = new Surface(Width, Height);
             Sprite.target = game.screen;
             screenID = game.screen.GenTexture();
             game.Init();
@@ -29,7 +30,7 @@ namespace Template_P3 {
         protected override void OnUnload( EventArgs e )
         {
             // called upon app close
-            GL.DeleteTextures( 1, ref screenID );
+            GL.DeleteTextures( 1, ref screenID);
             Environment.Exit( 0 ); // bypass wait for key on CTRL-F5
         }
         protected override void OnResize( EventArgs e )
@@ -82,6 +83,10 @@ namespace Template_P3 {
             GL.Clear( ClearBufferMask.DepthBufferBit );
             GL.Disable( EnableCap.Texture2D );
             // do OpenGL rendering
+
+            
+
+
             game.RenderGL();
             // swap buffers
             SwapBuffers();

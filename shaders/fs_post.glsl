@@ -12,11 +12,11 @@ void main()
 {
 	// retrieve input pixel
 	outputColor = texture( pixels, uv ).rgb;
-	// postprocessing effect
+	// vignetting effect
 	float dx = 0.5f - P.x; 
 	float dy = 0.5f - P.y;
 	float distance = dx*dx + dy*dy;
-	outputColor = outputColor - distance / 2;
+	outputColor = outputColor - distance / 16;
 
 }
 

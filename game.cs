@@ -16,6 +16,7 @@ namespace Template_P3 {
         Shader shader;                  // shader to use for rendering
         Shader postproc;                // shader to use for post processing
         public Surface screen;			// background surface for printing etc.
+        public Surface textureSurface;
 	    Mesh teapot, floor, earth, moon;// a mesh to draw using OpenGL
 	    const float PI = 3.1415926535f;	// PI
 	    Stopwatch timer;				// timer for measuring frame duration
@@ -46,7 +47,8 @@ namespace Template_P3 {
 
 		    // create the render target
 		    target = new RenderTarget( screen.width, screen.height);
-		    quad = new ScreenQuad();
+            quad = new ScreenQuad();
+           
 
    	    }//Init
 
@@ -80,13 +82,13 @@ namespace Template_P3 {
             earth.modelMatrix *= Matrix4.CreateTranslation(0, 0, -800);
             earth.modelMatrix *= Matrix4.Rotate(new Vector3(0, 0, 1), PI);
             earth.ParentRotation = 0;
-            earth.Axisrotation = .2f;
+            earth.Axisrotation = .25f;
 
             moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
-            moon.ParentRotation = 0.1f;
+            moon.ParentRotation = 0.02f;
             moon.Axisrotation = 0;
 
-            teapot.ParentRotation = 0.1f;
+            teapot.ParentRotation = 0.02f;
             teapot.Axisrotation = 0;
             teapot.modelMatrix *= Matrix4.Rotate(new Vector3(-1, 1, 0), PI);
             teapot.modelMatrix *= Matrix4.CreateTranslation(-658.5f, 0, 0);
@@ -94,9 +96,11 @@ namespace Template_P3 {
             // Lights
             light1 = new Light(shader.uniform_lightpos1);
             light1.modelMatrix = Matrix4.CreateTranslation(10, 0, 0);
+            light1.name = "light1";
 
             light2 = new Light(shader.uniform_lightpos2);
-            light2.modelMatrix = Matrix4.CreateTranslation(-5, 10, 0);
+            light2.modelMatrix = Matrix4.CreateTranslation(0, 400, -800);
+            light2.name = "light2";
 
             scenegraph.lights.Add(light1);
             scenegraph.lights.Add(light2);
@@ -223,11 +227,15 @@ namespace Template_P3 {
             // update rotation
             light1.Render(shader);
             light2.Render(shader);
-
+            
             if (useRenderTarget)
 		    {
-			    // enable render target
-			    target.Bind();
+                // PP texture
+
+                
+
+                // enable render target
+                target.Bind();
 
                 // render scene to render target
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
@@ -235,6 +243,7 @@ namespace Template_P3 {
 
 			    // render quad
 			    target.Unbind();
+                
 			    quad.Render( postproc, target.GetTextureID() );
 		    }// if
 		    else
