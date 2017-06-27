@@ -22,7 +22,6 @@ namespace Template_P3 {
             ClientSize = new Size( 1280, 800 );
             game = new Game();
             game.screen = new Surface( Width, Height );
-            game.textureSurface = new Surface(Width, Height);
             Sprite.target = game.screen;
             screenID = game.screen.GenTexture();
             game.Init();

@@ -16,14 +16,13 @@ namespace Template_P3 {
         Shader shader;                  // shader to use for rendering
         Shader postproc;                // shader to use for post processing
         public Surface screen;			// background surface for printing etc.
-        public Surface textureSurface;
 	    Mesh teapot, floor, earth, moon, light2Teapot;// a mesh to draw using OpenGL
 	    const float PI = 3.1415926535f;	// PI
 	    Stopwatch timer;				// timer for measuring frame duration
-	    Texture wood, iron, marble, earthDayTexture, earthNightTexture, moonTexture, the_bikker;   // texture to use for rendering
+	    Texture wood, iron, marble, earthDayTexture, earthNightTexture, moonTexture, the_bikker; // texture to use for rendering
 	    RenderTarget target;			// intermediate render target
 	    ScreenQuad quad;				// screen filling quad for post processing
-	    bool useRenderTarget = true;
+	    bool useRenderTarget = true;    // render to texture
         SceneGraph scenegraph;          // scene graph containing all models
         Light light1, light2;           // light sources
         float speed = 3f;               // camera movementspeed modifier
@@ -56,12 +55,9 @@ namespace Template_P3 {
         public void initTextures()
         {
             wood         = new Texture("../../assets/wood.jpg");
-            iron         = new Texture("../../assets/iron.jpg");
             marble       = new Texture("../../assets/marble.jpg");
             earthDayTexture = new Texture("../../assets/earthTextures/4096_earth.jpg");
-            earthNightTexture = new Texture("../../assets/earthTextures/4096_night_lights.jpg");
             moonTexture = new Texture("../../assets/MoonMap2_2500x1250.jpg");
-            the_bikker = new Texture("../../assets/the_bikker.png");
         }//initTextures()
 
         // initializes all meshes
@@ -117,7 +113,7 @@ namespace Template_P3 {
             moon.Parent = earth;
 
             // setting textures
-            floor.texture = the_bikker;
+            floor.texture = wood;
             teapot.texture = marble;
             earth.texture = earthDayTexture;
             moon.texture = moonTexture;
@@ -147,11 +143,11 @@ namespace Template_P3 {
             for (int i = 0; i < scenegraph.meshTree.Count; i++)
                 if (scenegraph.meshTree[i].Parent == null)
                     printObjTreeRecur(scenegraph.meshTree[i], 0, ref meshList);
+
             System.Threading.Thread.Sleep(500); // sleep function as to not spam the console when someone presses the button a bit too long
             for (int i = meshList.Count - 1; i >= 0; i--)
-            {
                 Console.WriteLine(meshList[i]);
-            }
+            
         }//printObjTree()
 
         // recursive part of printObjTree() as to find all childs for each mesh
