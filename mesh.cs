@@ -22,9 +22,9 @@ namespace Template_P3 {
         public Matrix4 transform;               // tranform for obj
         internal Texture usedTexture;           // texture
         public Texture texture;                 // texture for obj
-        public string name;
-        public float ParentRotation;
-        public float Axisrotation;
+        public string name;                     // identifier
+        public float ParentRotation;            // rotation around parent
+        public float Axisrotation;              // rotation around own axis
 
         // constructor
         public Mesh( string fileName )

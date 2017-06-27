@@ -22,3 +22,5 @@ void main()
 	normal = transform * vec4( vNormal, 0.0f );
 	uv = vUV;
 }
+
+// EOF

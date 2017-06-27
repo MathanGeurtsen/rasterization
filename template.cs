@@ -12,6 +12,7 @@ namespace Template_P3 {
         static int screenID;
         static Game game;
         static bool terminated = false;
+
         protected override void OnLoad( EventArgs e )
         {
             // called upon app init
@@ -25,13 +26,15 @@ namespace Template_P3 {
             Sprite.target = game.screen;
             screenID = game.screen.GenTexture();
             game.Init();
-        }
+        }//OnLoad()
+
         protected override void OnUnload( EventArgs e )
         {
             // called upon app close
             GL.DeleteTextures( 1, ref screenID);
             Environment.Exit( 0 ); // bypass wait for key on CTRL-F5
-        }
+        }//OnUnload()
+
         protected override void OnResize( EventArgs e )
         {
             // called upon window resize
@@ -39,13 +42,15 @@ namespace Template_P3 {
             GL.MatrixMode( MatrixMode.Projection );
             GL.LoadIdentity();
             GL.Ortho( -1.0, 1.0, -1.0, 1.0, 0.0, 4.0 );
-        }
+        }//OnResize()
+
         protected override void OnUpdateFrame( FrameEventArgs e )
         {
             // called once per frame; app logic
             var keyboard = OpenTK.Input.Keyboard.GetState();
             if (keyboard[OpenTK.Input.Key.Escape]) this.Exit();
-        }
+        }//OnUpdateFrame()
+
         protected override void OnRenderFrame( FrameEventArgs e )
         {
             // called once per frame; render
@@ -54,7 +59,7 @@ namespace Template_P3 {
             {
                 Exit();
                 return;
-            }
+            }// if
             // set the state for rendering the quad
             GL.ClearColor( Color.Black );
             GL.Enable( EnableCap.Texture2D );
@@ -81,21 +86,18 @@ namespace Template_P3 {
             GL.Enable( EnableCap.DepthTest );
             GL.Clear( ClearBufferMask.DepthBufferBit );
             GL.Disable( EnableCap.Texture2D );
-            // do OpenGL rendering
-
             
-
-
+            // do OpenGL rendering
             game.RenderGL();
             // swap buffers
             SwapBuffers();
-        }
+        }//OnRenderFrame()
+
         public static void Main( string[] args ) 
         { 
             // entry point
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo( "en-US" ); // thanks Mathijs
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo( "en-US" ); // thanks Mathijs!
             using (OpenTKApp app = new OpenTKApp()) { app.Run( 30.0, 0.0 ); }
-        }
-    }
-
+        }//Main()
+    }//OpenTKAPP
 } // namespace Template_P3
