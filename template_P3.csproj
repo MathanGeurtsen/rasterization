@@ -84,6 +84,8 @@
     <None Include="packages.config" />
     <None Include="shaders\fs.glsl" />
     <None Include="shaders\fs_post.glsl" />
+    <None Include="shaders\skyfs.glsl" />
+    <None Include="shaders\skyvs.glsl" />
     <None Include="shaders\vs.glsl" />
     <None Include="shaders\vs_post.glsl" />
   </ItemGroup>
