@@ -5,6 +5,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.IO;
+using System.Drawing;
 // minimal OpenTK rendering framework for UU/INFOGR
 // Jacco Bikker, 2016
 
@@ -12,28 +13,91 @@ namespace Template_P3 {
 
     class Game
     {
-	    // member variables
-	    public Surface screen;					// background surface for printing etc.
-	    Mesh mesh, floor, teapot, vloer;		// a mesh to draw using OpenGL
-	    const float PI = 3.1415926535f;			// PI
-	    Stopwatch timer;						// timer for measuring frame duration
-	    Shader shader;							// shader to use for rendering
-	    Shader postproc;						// shader to use for post processing
-	    Texture wood;							// texture to use for rendering
-	    RenderTarget target;					// intermediate render target
-	    ScreenQuad quad;						// screen filling quad for post processing
-	    bool useRenderTarget = true;
+        // member variables
+        public Surface screen;                  // background surface for printing etc.
+        Mesh mesh, floor, teapot, vloer;        // a mesh to draw using OpenGL
+        const float PI = 3.1415926535f;         // PI
+        Stopwatch timer;                        // timer for measuring frame duration
+        Shader shader;                          // shader to use for rendering
+        Shader postproc;                        // shader to use for post processing
+        Shader skyboxshader;
+        Texture wood;                           // texture to use for rendering
+        RenderTarget target;                    // intermediate render target
+        ScreenQuad quad;                        // screen filling quad for post processing
+        bool useRenderTarget = true;
         SceneGraph scenegraph;                  // scene graph containing all models
         float speed = 1f;                       // camera movementspeed modifier
         Light light1, light2;
+        //skybox
+        Bitmap[] faces;
+        uint cubemapTexture;
+        int skyvertexBufferId;
+        int VAO;
+        float[] skyboxVertices;
 
         // initialize
         public void Init()
-	    {
+        {
             // create shaders
             shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
+            skyboxshader = new Shader("../../shaders/skyvs.glsl", "../../shaders/skyfs.glsl");
             scenegraph = new SceneGraph();
+            //skybox
+            faces = new Bitmap[6];
+            faces[0] = new Bitmap("../../assets/right.jpg"); faces[1] = new Bitmap("../../assets/left.jpg"); faces[2] = new Bitmap("../../assets/top.jpg");
+            faces[3] = new Bitmap("../../assets/bottom.jpg"); faces[4] = new Bitmap("../../assets/back.jpg"); faces[5] = new Bitmap("../../assets/front.jpg");
+            cubemapTexture = loadCubemap(faces);
+            skyboxVertices = new float[]
+            {
+            // positions          
+            -1.0f,  1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+             1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+
+             1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+
+            -1.0f, -1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+
+            -1.0f,  1.0f, -1.0f,
+             1.0f,  1.0f, -1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+             1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f
+            };
+            GL.GenVertexArrays(1, out VAO);
+
+            GL.GenBuffers(1, out skyvertexBufferId);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, skyvertexBufferId);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(skyboxVertices.Length * sizeof(float)), skyboxVertices, BufferUsageHint.StaticDraw);
             // load textures
             initTextures();
             // load meshes
@@ -173,6 +237,19 @@ namespace Template_P3 {
 		    timer.Reset();
 		    timer.Start();
 
+            //skybox
+            GL.Uniform1(GL.GetUniformLocation(skyboxshader.programID, "skybox"), 0);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.TextureCubeMap, cubemapTexture);
+
+            GL.UseProgram(skyboxshader.programID);
+
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+            GL.EnableVertexAttribArray(0);
+
+            GL.BindVertexArray(VAO);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
             // prepare matrix for vertex shader
             scenegraph.transform();
 
@@ -199,7 +276,8 @@ namespace Template_P3 {
                 for (int i = 0; i < scenegraph.meshTree.Count; i++)
                     scenegraph.meshTree[i].Render(shader);
             }// else
-	    }// RenderGL
+
+        }// RenderGL
 
         public void addmesh(string objectFile, Texture texture)
         {
@@ -238,6 +316,33 @@ namespace Template_P3 {
             }
         }
 
+
+        // skybox
+        uint loadCubemap(Bitmap[] faces)
+        {
+            uint textureID;
+            GL.GenTextures(1, out textureID);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.TextureCubeMap, textureID);
+
+            for (int i = 0; i < faces.Length; i++)
+            {
+                System.Drawing.Imaging.BitmapData data = faces[i].LockBits(new Rectangle(0, 0, faces[i].Width, faces[i].Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+                    GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i,
+                                 0, PixelInternalFormat.Rgb, data.Width, data.Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, data.Scan0
+                    );
+                faces[i].UnlockBits(data);
+            }
+
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
+
+            return textureID;
+        }
 
 
     }// Game
