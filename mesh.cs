@@ -25,6 +25,7 @@ namespace Template_P3 {
         public string name;
         public float ParentRotation;
         public float Axisrotation;
+            
 
         // constructor
         public Mesh( string fileName )
@@ -75,9 +76,10 @@ namespace Template_P3 {
 
 		    // pass transform to vertex shader
 		    GL.UniformMatrix4( shader.uniform_mview, false, ref transform );
+            
 
-		    // bind interleaved vertex data
-		    GL.EnableClientState( ArrayCap.VertexArray );
+            // bind interleaved vertex data
+            GL.EnableClientState( ArrayCap.VertexArray );
 		    GL.BindBuffer( BufferTarget.ArrayBuffer, vertexBufferId );
 		    GL.InterleavedArrays( InterleavedArrayFormat.T2fN3fV3f, Marshal.SizeOf( typeof( ObjVertex ) ), IntPtr.Zero );
 

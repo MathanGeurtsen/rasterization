@@ -12,8 +12,8 @@ namespace Template_P3
         public Matrix4 projectionMatrix;                        // matrix for FOV
         public Matrix4 viewMatrix = Matrix4.Identity;           // matrix for movement and Y-axis rotation
         public Matrix4 viewMatrix2 = Matrix4.Identity;          // matrix for X-axis rotation
-        static public Vector3 lightPos = new Vector3(5, 0, -10);
-        public Matrix4 modellightPos = Matrix4.CreateTranslation(lightPos);
+        
+
         float a = 0.001f;
 
         // Constructor
@@ -52,13 +52,13 @@ namespace Template_P3
             {
 
                 if (meshTree[i].Parent != null)
-                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * meshTree[i].ParentRotation) * meshTree[i].Parent.transform;
+                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * meshTree[i].ParentRotation) * meshTree[i].Parent.transform*projectionMatrix;
                 else
-                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
+                    meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].modelMatrix * viewMatrix * viewMatrix2*projectionMatrix;
             }
             a += 0.01f;
             for (int i = 0; i < lights.Count; i++)
-                lights[i].transform = lights[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
+                lights[i].transform = lights[i].modelMatrix * viewMatrix * viewMatrix2*projectionMatrix;
 
         }//transform()
 

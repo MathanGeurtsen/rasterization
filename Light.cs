@@ -25,11 +25,19 @@ namespace Template_P3
 
         public void Render(Shader shader)
         {
+            Vector4 newVector = new Vector4(modelMatrix.Row0.X, modelMatrix.Row1.Y, modelMatrix.Row2.Z,1);
+            Vector4 another = Vector4.Transform(newVector, transform);
+
+            Matrix4 result = Matrix4.Identity;
+            result.Row0.X = another.X;
+            result.Row1.Y = another.Y;
+            result.Row2.Z = another.Z;
+
             GL.UseProgram(shader.programID);
             if (name == "light1")
-                GL.UniformMatrix4(shader.uniform_lightpos1, false, ref transform);
+                GL.UniformMatrix4(shader.uniform_lightpos1, false, ref result);
             else if (name == "light2")
-                GL.UniformMatrix4(shader.uniform_lightpos2, false, ref transform);
+                GL.UniformMatrix4(shader.uniform_lightpos2, false, ref result);
         }
     }
 }

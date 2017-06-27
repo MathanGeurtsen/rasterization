@@ -17,6 +17,10 @@ void main()
 	float dy = 0.5f - P.y;
 	float distance = dx*dx + dy*dy;
 	outputColor = outputColor - distance / 16;
+	if (dx == 0.5f || dy ==0.5f)
+	{
+		outputColor = vec3 (1,1,1);
+	}
 
 }
 

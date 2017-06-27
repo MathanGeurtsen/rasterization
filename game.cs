@@ -190,16 +190,16 @@ namespace Template_P3 {
 
             // Keypress to "turn camera upwards"
             if (keystate[OpenTK.Input.Key.Up])
-                scenegraph.rotate(new Vector3(-1, 0, 0), (PI / 120) * speed/4);
+                scenegraph.rotate(new Vector3(-1, 0, 0), (PI / 120) * speed);
             // Keypress to "turn camera downwards"
             if (keystate[OpenTK.Input.Key.Down])
-                scenegraph.rotate(new Vector3(1, 0, 0), (PI / 120) * speed/4);
+                scenegraph.rotate(new Vector3(1, 0, 0), (PI / 120) * speed);
             // Keypress to "turn camera to the left"
             if (keystate[OpenTK.Input.Key.Left])
-                scenegraph.rotateHorizontal(new Vector3(0, -1, 0), (PI / 120) * speed/4);
+                scenegraph.rotateHorizontal(new Vector3(0, -1, 0), (PI / 120) * speed);
             // Keypress to "turn camera to the right"
             if (keystate[OpenTK.Input.Key.Right])
-                scenegraph.rotateHorizontal(new Vector3(0, 1, 0), (PI / 120) * speed/4);
+                scenegraph.rotateHorizontal(new Vector3(0, 1, 0), (PI / 120) * speed);
 
             // Keypress to reset camera position
             if (keystate[OpenTK.Input.Key.R])
@@ -230,6 +230,9 @@ namespace Template_P3 {
 
             // prepare matrix for vertex shader
             scenegraph.transform();
+            Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 10000);
+            GL.UniformMatrix4(shader.uniform_projectionMatrix, false, ref projectionMatrix);
+
 
             // update rotation
             light1.Render(shader);

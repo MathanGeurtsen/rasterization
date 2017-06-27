@@ -14,6 +14,7 @@ namespace Template_P3 {
         public int uniform_mview;
         public int uniform_lightpos1;
         public int uniform_lightpos2;
+        public int uniform_projectionMatrix;
 
         // constructor
         public Shader( String vertexShader, String fragmentShader )
@@ -33,6 +34,7 @@ namespace Template_P3 {
             uniform_mview = GL.GetUniformLocation( programID, "transform" );
             uniform_lightpos1 = GL.GetUniformLocation(programID, "lightPos1");
             uniform_lightpos2 = GL.GetUniformLocation(programID, "lightPos2");
+            uniform_projectionMatrix = GL.GetUniformLocation(programID, "projectionMatrix");
         }
 
         // loading shaders
