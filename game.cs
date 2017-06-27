@@ -100,12 +100,13 @@ namespace Template_P3 {
 
             light2 = new Light(shader.uniform_lightpos2);
             light2.modelMatrix = Matrix4.CreateTranslation(0, 400, -800);
+            light2.rotationspeed = 0.5f;
             light2.name = "light2";
 
             // Visual indicator for light2
             light2Teapot.modelMatrix = Matrix4.CreateTranslation(0, 400, -800);
             light2Teapot.Parent = floor;
-            light2Teapot.ParentRotation = 1f;
+            light2Teapot.ParentRotation = 0.5f;
             light2Teapot.Axisrotation = -1f;
 
             scenegraph.lights.Add(light1);
@@ -116,7 +117,7 @@ namespace Template_P3 {
             moon.Parent = earth;
 
             // setting textures
-            floor.texture = wood;
+            floor.texture = the_bikker;
             teapot.texture = marble;
             earth.texture = earthDayTexture;
             moon.texture = moonTexture;
@@ -245,10 +246,6 @@ namespace Template_P3 {
             
             if (useRenderTarget)
 		    {
-                // PP texture
-
-                
-
                 // enable render target
                 target.Bind();
 
@@ -258,7 +255,7 @@ namespace Template_P3 {
 
 			    // render quad
 			    target.Unbind();
-                
+
 			    quad.Render( postproc, target.GetTextureID() );
 		    }// if
 		    else
@@ -268,46 +265,6 @@ namespace Template_P3 {
                     scenegraph.meshTree[i].Render(shader);
             }// else
 	    }// RenderGL
-
-        public void addmesh(string objectFile, Texture texture)
-        {
-            Mesh mesh;
-            if (File.Exists(objectFile) && texture != null)
-            {
-                mesh = new Mesh(objectFile);
-                mesh.usedTexture = texture;
-                scenegraph.meshTree.Add(mesh);
-            }
-        }
-        public void addmesh(string objectFile, Texture texture, Mesh parentmesh)
-        {
-            Mesh mesh;
-            if (File.Exists(objectFile) && texture != null && parentmesh != null)
-            {
-                mesh = new Mesh(objectFile);
-                mesh.usedTexture = texture;
-                mesh.Parent = parentmesh;
-                
-                scenegraph.meshTree.Add(mesh);
-                
-            }
-        }
-
-        public void addmesh(string objectFile, Texture texture, Matrix4 modelMatrix)
-        {
-            Mesh mesh;
-            if (File.Exists(objectFile) && texture != null)
-            {
-                mesh = new Mesh(objectFile);
-                mesh.usedTexture = texture;
-                mesh.modelMatrix = modelMatrix;
-                scenegraph.meshTree.Add(mesh);
-
-            }
-        }
-
-
-
     }// Game
 
 } // namespace Template_P3

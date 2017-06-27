@@ -13,6 +13,7 @@ namespace Template_P3
         public Matrix4 transform;               // tranform for obj
         public string name;
         public int lightpos;
+        public float rotationspeed = 1f;
 
         // constructor
         public Light(int lightp)

@@ -56,7 +56,7 @@ namespace Template_P3
             }
             a += 0.01f;
             for (int i = 0; i < lights.Count; i++)
-                lights[i].transform = lights[i].modelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a) * viewMatrix * viewMatrix2 * projectionMatrix;
+                lights[i].transform = lights[i].modelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * lights[i].rotationspeed) * viewMatrix * viewMatrix2 * projectionMatrix;
 
         }//transform()
 

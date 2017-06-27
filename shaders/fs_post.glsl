@@ -10,13 +10,22 @@ out vec3 outputColor;
 
 void main()
 {
-	// retrieve input pixel
-	outputColor = texture( pixels, uv ).rgb;
 	// vignetting effect
 	float dx = 0.5f - P.x; 
 	float dy = 0.5f - P.y;
 	float distance = dx*dx + dy*dy;
-	outputColor = outputColor - distance / 16;
+
+  // offsets for chromatic abberation
+  float rOffset = (distance-0.5)/100f;
+  float bOffset = (distance-0.5)/100f;  
+
+  // retrieve input pixel and neigbouring pixels
+	outputColor = texture( pixels, uv ).rgb;
+  float ColorRedInner = texture( pixels, vec2(uv.x -rOffset,uv.y -rOffset)).r;
+  float ColorGreenOuter = texture( pixels, vec2(uv.x ,uv.y)).g;
+  float ColorBlueOuter = texture( pixels, vec2(uv.x +bOffset,uv.y +bOffset)).b;
+
+	outputColor = (outputColor + vec3(ColorRedInner/1.5,ColorGreenOuter/1.5,ColorBlueOuter/1.5) - distance/2);
 
 }
 
