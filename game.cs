@@ -133,21 +133,28 @@ namespace Template_P3 {
         // prints all meshes as an upside-down tree structure
         public void printObjTree()
         {
+            List<string> meshList = new List<string>();
             for (int i = 0; i < scenegraph.meshTree.Count; i++)
                 if (scenegraph.meshTree[i].Parent == null)
-                    printObjTreeRecur(scenegraph.meshTree[i], 0);
+                    printObjTreeRecur(scenegraph.meshTree[i], 0, ref meshList);
             System.Threading.Thread.Sleep(500); // sleep function as to not spam the console when someone presses the button a bit too long
+            for (int i = meshList.Count - 1; i >= 0; i--)
+            {
+                Console.WriteLine(meshList[i]);
+            }
         }//printObjTree()
 
         // recursive part of printObjTree() as to find all childs for each mesh
-        public void printObjTreeRecur(Mesh mesh, int depth)
+        public void printObjTreeRecur(Mesh mesh, int depth, ref List<string> meshlist)
         {
+            string result = "";
             for (int i = 0; i < scenegraph.meshTree.Count; i++)
                 if (scenegraph.meshTree[i].Parent == mesh)
-                    printObjTreeRecur(scenegraph.meshTree[i], depth + 1);
+                    printObjTreeRecur(scenegraph.meshTree[i], depth + 1, ref meshlist);
             for (int i = 0; i < depth; i++)
-                Console.Write("  ");
-            Console.Write("+--" + mesh.name + '\n');
+                result += "  ";
+            result += "+--" + mesh.name;
+            meshlist.Add(result);
         }//printObjeTreeRecur()
 
 	    // tick for background surface
