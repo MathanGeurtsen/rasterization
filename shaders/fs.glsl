@@ -2,12 +2,12 @@
  
 // shader input
 in vec4 normal;		// interpolated normal
-in vec2 uv;			// interpolated texture coordinates
+in vec2 uv;		// interpolated texture coordinates
 in vec3 worldPos;	// fragment position in worldspace
 
 
 uniform sampler2D pixels;		// texture sampler
-
+//other variables
 uniform float ambientLight = 0.1f;
 uniform mat4 lightPos1;
 uniform mat4 lightPos2;
@@ -34,10 +34,9 @@ void main()
 	// diffuse lighting 1
 	vec3 lightDir1 = normalize(lightp1 - worldPos);
 	float diff1 = max(dot(norm, lightDir1), 0.0);
-    vec3 diffuse1 = diff1 * lightColor1 * diffStr1;
+    	vec3 diffuse1 = diff1 * lightColor1 * diffStr1;
 				
-    // Specular lighting 1
-    
+    // Specular lighting 1    
     vec3 reflectDir1 = reflect(-lightDir1, norm);
 
     float spec1 = pow(max(dot(viewDir, reflectDir1), 0.0), 32);
@@ -47,8 +46,6 @@ void main()
         specular1 = vec3(0,0,0);
     }
 	
-	
-
 	// diffuse lighting 2
 	vec3 lightDir2 = normalize(lightp2 - worldPos);
 
@@ -65,11 +62,9 @@ void main()
     {
         specular2 = vec3(0,0,0);
     }
-				
-				
+							
     // add diffuse, ambient and specular lighting of 1 and 2
     vec3 result = (ambientLight + diffuse1/2 + specular1/2 + diffuse2/2 + specular2/2) * texture( pixels, uv ).xyz;
-	
 
     outputColor = vec4(result,1.0); //	+ 0.2f * vec4( normal.xyz * , 1 );
 }
