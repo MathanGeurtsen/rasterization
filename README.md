@@ -51,9 +51,8 @@ specular shading and the strength of the diffuse shading. Of course we
 have the ambient shading which isn't bound to a particular
 lightsource, which has its own variable ambientLight.
 
-in the fragment post processing shader we add a vignetting effect,
-controlled by the distance to the center of the screen as evident by
-the darkened edges on the screen.
+in the fragment post processing shader we add a vignetting effect as well as chromatic aberration,
+controlled by the distance to the center of the screen as evident by the darkened edges on the screen and the red and blue ofsets around objects.
 
 Control map:
 -Movement:
