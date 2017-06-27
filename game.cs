@@ -71,7 +71,6 @@ namespace Template_P3 {
             light2Teapot = new Mesh("../../assets/teapot.obj");
 
             // setting translation and rotation matrices
-
             floor.Axisrotation = 0;
             floor.ParentRotation = 0;
             
@@ -99,15 +98,15 @@ namespace Template_P3 {
             light2.rotationspeed = 0.5f;
             light2.name = "light2";
 
+            scenegraph.lights.Add(light1);
+            scenegraph.lights.Add(light2);
+
             // Visual indicator for light2
             light2Teapot.modelMatrix = Matrix4.CreateTranslation(0, 400, -800);
             light2Teapot.Parent = floor;
             light2Teapot.ParentRotation = 0.5f;
             light2Teapot.Axisrotation = -1f;
-
-            scenegraph.lights.Add(light1);
-            scenegraph.lights.Add(light2);
-
+            
             // setting parents
             teapot.Parent = moon;
             moon.Parent = earth;
@@ -147,7 +146,6 @@ namespace Template_P3 {
             System.Threading.Thread.Sleep(500); // sleep function as to not spam the console when someone presses the button a bit too long
             for (int i = meshList.Count - 1; i >= 0; i--)
                 Console.WriteLine(meshList[i]);
-            
         }//printObjTree()
 
         // recursive part of printObjTree() as to find all childs for each mesh

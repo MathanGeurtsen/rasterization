@@ -11,9 +11,9 @@ namespace Template_P3
         public Mesh Parent;                     // parent mesh
         public Matrix4 modelMatrix;             // model matrix
         public Matrix4 transform;               // tranform for obj
-        public string name;
-        public int lightpos;
-        public float rotationspeed = 1f;
+        public string name;                     // identifier
+        public int lightpos;                    // position in worldspace
+        public float rotationspeed = 1f;        // speed of rotation
 
         // constructor
         public Light(int lightp)
@@ -22,8 +22,9 @@ namespace Template_P3
             transform = Matrix4.Identity;
             name = "Light";
             lightpos = lightp;
-        }
+        }//Light
 
+        // send lightposition to shader
         public void Render(Shader shader)
         {
             GL.UseProgram(shader.programID);
@@ -31,6 +32,6 @@ namespace Template_P3
                 GL.UniformMatrix4(shader.uniform_lightpos1, false, ref transform);
             else if (name == "light2")
                 GL.UniformMatrix4(shader.uniform_lightpos2, false, ref transform);
-        }
-    }
-}
+        }//Render
+    }//Light
+}//Template_T3

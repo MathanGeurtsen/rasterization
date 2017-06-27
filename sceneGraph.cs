@@ -48,16 +48,14 @@ namespace Template_P3
         {
             for (int i = 0; i < meshTree.Count; i++)
             {
-
                 if (meshTree[i].Parent != null)
                     meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].initialModelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * meshTree[i].ParentRotation) * meshTree[i].Parent.transform;
                 else
                     meshTree[i].transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), -a * meshTree[i].Axisrotation) * meshTree[i].modelMatrix * viewMatrix * viewMatrix2 * projectionMatrix;
-            }
+            }//for
             a += 0.01f;
             for (int i = 0; i < lights.Count; i++)
                 lights[i].transform = lights[i].modelMatrix * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a * lights[i].rotationspeed) * viewMatrix * viewMatrix2 * projectionMatrix;
-
         }//transform()
 
         // function to change the viewMatrix as to "move the camera"
@@ -86,6 +84,6 @@ namespace Template_P3
             viewMatrix = Matrix4.Identity;
             viewMatrix2 = Matrix4.Identity;
         }//reset()
-    }
-}
+    }//SceneGraph
+}//Template_P3
 
