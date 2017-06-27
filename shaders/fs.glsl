@@ -7,7 +7,7 @@ in vec3 worldPos;	// fragment position in worldspace
 
 uniform sampler2D pixels;		// texture sampler
 
-float ambientLight = 0.0f;
+float ambientLight = 1.0f;
 uniform mat4 lightPos1;
 uniform mat4 lightPos2;
 uniform vec3 cameraPos = vec3(0,0,0);
@@ -43,24 +43,6 @@ void main()
 
 	
     vec3 lightDir2 = normalize(lightp2 - worldPos);
-	
-    // spotlight calculations
-    
-    float coneCosine = 0.01f;
-    vec3 vDir = normalize(worldPos - lightp2);
-    float fCosine = dot(vec3(0,0,1), vDir);
-
-    if (fCosine < coneCosine)
-    {
-        diffStr2 = 5.0f;        
-    }
-    
-	
-
-	if (worldPos.y > lightp2.y -0.5 && worldPos.y < lightp2.y + 0.5)
-	{
-      diffStr2 = 10.0f;
-	}
   
 	// diffuse lighting 2
     float diff2 = max(dot(norm, lightDir2), 0.0);
