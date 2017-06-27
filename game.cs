@@ -17,7 +17,7 @@ namespace Template_P3 {
         Shader postproc;                // shader to use for post processing
         public Surface screen;			// background surface for printing etc.
         public Surface textureSurface;
-	    Mesh teapot, floor, earth, moon;// a mesh to draw using OpenGL
+	    Mesh teapot, floor, earth, moon, light2Teapot;// a mesh to draw using OpenGL
 	    const float PI = 3.1415926535f;	// PI
 	    Stopwatch timer;				// timer for measuring frame duration
 	    Texture wood, iron, marble, earthDayTexture, earthNightTexture, moonTexture, the_bikker;   // texture to use for rendering
@@ -72,10 +72,10 @@ namespace Template_P3 {
             floor = new Mesh( "../../assets/floor.obj" );
             earth = new Mesh("../../assets/earth.obj");
             moon = new Mesh("../../assets/moon.obj");
+            light2Teapot = new Mesh("../../assets/teapot.obj");
 
             // setting translation and rotation matrices
 
-            floor.modelMatrix = Matrix4.CreateTranslation(0, -4, -15);
             floor.Axisrotation = 0;
             floor.ParentRotation = 0;
             
@@ -84,14 +84,14 @@ namespace Template_P3 {
             earth.ParentRotation = 0;
             earth.Axisrotation = .25f;
 
-            moon.modelMatrix *= Matrix4.CreateTranslation(-600, 0, 0);
+            moon.modelMatrix *= Matrix4.CreateTranslation(0, 0, -600);
             moon.ParentRotation = 0.02f;
             moon.Axisrotation = 0;
 
-            teapot.ParentRotation = 0.02f;
-            teapot.Axisrotation = 0;
+            teapot.ParentRotation = 1f;
+            teapot.Axisrotation = 0.5f;
             teapot.modelMatrix *= Matrix4.Rotate(new Vector3(-1, 1, 0), PI);
-            teapot.modelMatrix *= Matrix4.CreateTranslation(-658.5f, 0, 0);
+            teapot.modelMatrix *= Matrix4.CreateTranslation(-75f, 0, 0);
 
             // Lights
             light1 = new Light(shader.uniform_lightpos1);
@@ -102,11 +102,17 @@ namespace Template_P3 {
             light2.modelMatrix = Matrix4.CreateTranslation(0, 400, -800);
             light2.name = "light2";
 
+            // Visual indicator for light2
+            light2Teapot.modelMatrix = Matrix4.CreateTranslation(0, 400, -800);
+            light2Teapot.Parent = floor;
+            light2Teapot.ParentRotation = 1f;
+            light2Teapot.Axisrotation = -1f;
+
             scenegraph.lights.Add(light1);
             scenegraph.lights.Add(light2);
 
             // setting parents
-            teapot.Parent = earth;
+            teapot.Parent = moon;
             moon.Parent = earth;
 
             // setting textures
@@ -114,18 +120,21 @@ namespace Template_P3 {
             teapot.texture = marble;
             earth.texture = earthDayTexture;
             moon.texture = moonTexture;
+            light2Teapot.texture = marble;
 
             // adding names for showing the tree structure
             teapot.name = "teapot";
             floor.name  = "floor";
             earth.name  = "earth";
             moon.name   = "moon";
+            light2Teapot.name = "Light2Teapot";
 
             // adding meshes to the meshTree
             scenegraph.meshTree.Add(floor);
             scenegraph.meshTree.Add(teapot);
             scenegraph.meshTree.Add(earth);
             scenegraph.meshTree.Add(moon);
+            scenegraph.meshTree.Add(light2Teapot);
 
             scenegraph.render();
         }//initMeshes()
@@ -133,6 +142,7 @@ namespace Template_P3 {
         // prints all meshes as an upside-down tree structure
         public void printObjTree()
         {
+
             for (int i = 0; i < scenegraph.meshTree.Count; i++)
                 if (scenegraph.meshTree[i].Parent == null)
                     printObjTreeRecur(scenegraph.meshTree[i], 0);
@@ -142,12 +152,13 @@ namespace Template_P3 {
         // recursive part of printObjTree() as to find all childs for each mesh
         public void printObjTreeRecur(Mesh mesh, int depth)
         {
+            string tree = "";
             for (int i = 0; i < scenegraph.meshTree.Count; i++)
                 if (scenegraph.meshTree[i].Parent == mesh)
                     printObjTreeRecur(scenegraph.meshTree[i], depth + 1);
             for (int i = 0; i < depth; i++)
-                Console.Write("  ");
-            Console.Write("+--" + mesh.name + '\n');
+                tree += ("  ");
+            tree+=("+--" + mesh.name);
         }//printObjeTreeRecur()
 
 	    // tick for background surface
